@@ -11,6 +11,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { Roboto } from 'next/font/google';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useState } from 'react';
 
 const inter = Roboto({ weight: "400", subsets: ['latin'] })
@@ -79,7 +80,17 @@ export default function Home() {
       <main className={`${inter.className}`}>
         <Container fixed>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', padding: 5 }}>
-            <img src="https://e1.pxfuel.com/desktop-wallpaper/441/284/desktop-wallpaper-confirmado-presidente-da-cbf-anuncia-datas-do-brasileirao-e-copa-do-brasil-canal-flu-news-campeonato-brasileiro-serie-a.jpg" className="logo" alt="Brasileirão logo" style={{ width: '45%' }}/>
+            <Image 
+              src="https://e1.pxfuel.com/desktop-wallpaper/441/284/desktop-wallpaper-confirmado-presidente-da-cbf-anuncia-datas-do-brasileirao-e-copa-do-brasil-canal-flu-news-campeonato-brasileiro-serie-a.jpg" 
+              className="logo" 
+              alt="Brasileirão logo" 
+              width={600}              
+              height={400}
+              blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADA...'
+              sizes="(min-width: 60em) 24vw,
+                      (min-width: 28em) 45vw,
+                      100vw"
+            />
             <Typography variant='h3' sx={{ paddingY: 3, textAlign: 'center' }}>Brazuerão Apostas</Typography>
             { usersScore.length > 0 && <Typography variant='body1'>Atualizado em {`${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`}</Typography>}
           </Box>

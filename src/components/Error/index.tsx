@@ -1,5 +1,6 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import Image from 'next/image';
 import React from 'react';
 
 export function ErrorComponent({errorMessage} : { errorMessage: string }) {
@@ -30,10 +31,15 @@ export function ErrorComponent({errorMessage} : { errorMessage: string }) {
             <Button color='warning' variant="contained" sx={{ mt: 5}} onClick={refreshPage}>Back Home</Button>
           </Grid>
           <Grid xs={6}>
-            <img
+            <Image
               src="https://img.freepik.com/free-vector/500-internal-server-error-concept-illustration_114360-1885.jpg?w=2000"
               alt=""
-              width={500} 
+              width={500}              
+              height={700}
+              blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADA...'
+              sizes="(min-width: 60em) 24vw,
+                      (min-width: 28em) 45vw,
+                      100vw"
             />
           </Grid>
         </Grid>
