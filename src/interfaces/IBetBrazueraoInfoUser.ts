@@ -1,4 +1,4 @@
 export interface IBetBrazueraoInfoUser {
-  name: string;
-  teamsClassification: string[];
+  name: string
+  teamsClassification: string[]
 }

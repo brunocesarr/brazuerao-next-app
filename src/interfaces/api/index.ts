@@ -1,3 +1,3 @@
-export * from './ITeamApiInfo';
-export * from './ITeamPositionApiInfo';
-export * from './IBrasileiraoLeagueInfo';
+export * from './ITeamApiInfo'
+export * from './ITeamPositionApiInfo'
+export * from './IBrasileiraoLeagueInfo'

@@ -1,14 +1,10 @@
 interface TabPanelProps {
-  children?: React.ReactNode;
-  tabName: string;
-  tabNameActive: string;
+  children?: React.ReactNode
+  tabName: string
+  tabNameActive: string
 }
 
-export function TabPanel({
-  children,
-  tabName,
-  tabNameActive
-}: TabPanelProps) {
+export function TabPanel({ children, tabName, tabNameActive }: TabPanelProps) {
   return (
     <div
       role="tabpanel"
@@ -16,7 +12,7 @@ export function TabPanel({
       id={`tabpanel-${tabName}`}
       aria-labelledby={`tab-${tabName}`}
     >
-      {tabName.toUpperCase().includes(tabNameActive.toUpperCase()) && (children)}
+      {tabName.toUpperCase().includes(tabNameActive.toUpperCase()) && children}
     </div>
-  );
+  )
 }
