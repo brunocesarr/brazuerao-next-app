@@ -1,8 +1,8 @@
 
 export class UserUrlPhotos {
-	static readonly ANDERSON_PHOTO_URL: string = 'https://scontent-gru1-1.cdninstagram.com/v/t51.2885-19/337736927_162345140038276_3382389571874633696_n.jpg?stp=dst-jpg_s150x150&_nc_ht=scontent-gru1-1.cdninstagram.com&_nc_cat=104&_nc_ohc=yZ4PWpoPI60AX8V0hCI&edm=ACWDqb8BAAAA&ccb=7-5&oh=00_AfBqVnA4kiOjKmCfV1upf2E6ElQMB6cIBvpoUxZOjD9L_A&oe=647A4AE8&_nc_sid=640168';
-	static readonly AILTON_PHOTO_URL: string = `https://scontent-gru2-2.cdninstagram.com/v/t51.2885-19/28751533_809965055860602_4933314068862730240_n.jpg?stp=dst-jpg_s150x150&_nc_ht=scontent-gru2-2.cdninstagram.com&_nc_cat=106&_nc_ohc=5ilJVMKtY_wAX94LSec&edm=ACWDqb8BAAAA&ccb=7-5&oh=00_AfAmh0LDCDhX1pQgTlfPxrUrqi-VNlKxPwpV3D0-l9wgkQ&oe=647937D6&_nc_sid=640168`;
-	static readonly BRUNO_PHOTO_URL: string = `https://scontent-gru1-2.cdninstagram.com/v/t51.2885-19/319872987_898211307847400_1492622632597651944_n.jpg?stp=dst-jpg_s150x150&_nc_ht=scontent-gru1-2.cdninstagram.com&_nc_cat=108&_nc_ohc=-K0zBe7W4zYAX_6GX1w&edm=ACWDqb8BAAAA&ccb=7-5&oh=00_AfDNPMvCwtmmMxqW0LMrSOYPw2jHgwOdqVsZOZ5_0c71BA&oe=647B0188&_nc_sid=640168`;
-	static readonly LUCAS_PHOTO_URL: string = `https://scontent-gru1-1.cdninstagram.com/v/t51.2885-19/280431331_7542249595816366_4902011686921728467_n.jpg?stp=dst-jpg_s150x150&_nc_ht=scontent-gru1-1.cdninstagram.com&_nc_cat=110&_nc_ohc=ZBPTFAHkKoUAX_40yAo&edm=ACWDqb8BAAAA&ccb=7-5&oh=00_AfAHDMBGL_j_OwL8Cpao41O3awxcI-LZ_UvC4QFcV25ixw&oe=6479C287&_nc_sid=640168`;
-	static readonly DEDE_PHOTO_URL: string = `https://scontent-gru1-1.cdninstagram.com/v/t51.2885-19/294904438_123079923610294_4722528776795767216_n.jpg?stp=dst-jpg_s150x150&_nc_ht=scontent-gru1-1.cdninstagram.com&_nc_cat=110&_nc_ohc=ITsYbZmHkTUAX-XPKnS&edm=ACWDqb8BAAAA&ccb=7-5&oh=00_AfB01eAIchj21RKBRS1YGvLX775UUfEVkFnDSQkAVGOU4w&oe=64792841&_nc_sid=640168`;
+	static readonly ANDERSON_PHOTO_URL: string = `users-photos/anderson.jpg`;
+	static readonly AILTON_PHOTO_URL: string = `users-photos/ailton.jpg`;
+	static readonly BRUNO_PHOTO_URL: string = `users-photos/bruno.jpg`;
+	static readonly LUCAS_PHOTO_URL: string = `users-photos/lucas.jpg`;
+	static readonly DEDE_PHOTO_URL: string = `users-photos/adelson.jpg`;
 } 

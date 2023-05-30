@@ -84,8 +84,8 @@ export default function Home() {
               src="https://e1.pxfuel.com/desktop-wallpaper/441/284/desktop-wallpaper-confirmado-presidente-da-cbf-anuncia-datas-do-brasileirao-e-copa-do-brasil-canal-flu-news-campeonato-brasileiro-serie-a.jpg" 
               className="logo" 
               alt="Brasileirão logo" 
-              width={600}              
-              height={400}
+              width={480}              
+              height={270}
               blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADA...'
               sizes="(min-width: 60em) 24vw,
                       (min-width: 28em) 45vw,
@@ -101,7 +101,8 @@ export default function Home() {
                 <Avatar
                   alt={usersScore[usersScore.length - 1].username}
                   src={getUrlPhotoUrl(usersScore[usersScore.length - 1].username)}
-                  sx={{ width: 56, height: 56, backgroundColor: 'red' }}
+                  sx={{ width: 60, height: 60, backgroundColor: 'red', mb: 1 }}
+                  variant='rounded'
                 />
                 <Typography variant='body1'>Pagador (até agora): <b>{usersScore[usersScore.length - 1].username.toUpperCase()}</b></Typography>
               </>
