@@ -9,7 +9,8 @@ const positionCorrectScore = 2;
 const ZoneCorrectScore = 1;
 
 const G4Zone = [1, 2, 3, 4];
-const SulamericanaZone = [5, 6, 7, 8, 9, 10, 11, 12];
+const PreLibertadoresZone = [5, 6];
+const SulamericanaZone = [7, 8, 9, 10, 11, 12];
 const NeutralZone = [13, 14, 15, 16];
 const RelegationZone = [17, 18, 19, 20];
 
@@ -21,7 +22,7 @@ function getTeamsInCorrectPositions(leagueTable: ITeamPositionInfo[], teamsOrder
   });
 }
 
-function getTeamsInCorrectZones(leagueTable: ITeamPositionInfo[], teamsOrderBet: string[]) {
+function getTeamsInCorrectZones(leagueTable: ITeamPositionInfo[], teamsOrderBet: string[], useOriginalZonesInTable: boolean) {
   return teamsOrderBet.filter((teamPositionInBet, index) => {
     const currentBetPositionTeam = index + 1;
     const currentPositionTeam = leagueTable.find(teamInfoPosition => teamInfoPosition.nomePopular.includes(teamPositionInBet))?.posicao;
@@ -29,9 +30,16 @@ function getTeamsInCorrectZones(leagueTable: ITeamPositionInfo[], teamsOrderBet:
     if (!currentPositionTeam || currentPositionTeam === currentBetPositionTeam)
       return false;
 
+    let teamIsCentralZone = [...PreLibertadoresZone, ...SulamericanaZone, ...NeutralZone].includes(currentPositionTeam as number) 
+      && [...PreLibertadoresZone, ...SulamericanaZone, ...NeutralZone].includes(currentBetPositionTeam);
+
+    if (useOriginalZonesInTable)
+      teamIsCentralZone = (PreLibertadoresZone.includes(currentPositionTeam as number) && PreLibertadoresZone.includes(currentBetPositionTeam))
+      || (SulamericanaZone.includes(currentPositionTeam as number) && SulamericanaZone.includes(currentBetPositionTeam))
+      || (NeutralZone.includes(currentPositionTeam as number) && NeutralZone.includes(currentBetPositionTeam));
+
     return (G4Zone.includes(currentPositionTeam as number) && G4Zone.includes(currentBetPositionTeam))
-      || ((SulamericanaZone.includes(currentPositionTeam as number) && SulamericanaZone.includes(currentBetPositionTeam))
-      || (NeutralZone.includes(currentPositionTeam as number) && NeutralZone.includes(currentBetPositionTeam)))
+      || teamIsCentralZone
       || (RelegationZone.includes(currentPositionTeam as number) && RelegationZone.includes(currentBetPositionTeam));
   });
 }
@@ -43,14 +51,14 @@ function getTeamsInCorrectPositionsWithPositionInfo(leagueTable: ITeamPositionIn
   })
 }
 
-function getTeamsInCorrectZonesWithPositionInfo(leagueTable: ITeamPositionInfo[], teamsOrderBet: string[]) {
-  return getTeamsInCorrectZones(leagueTable, teamsOrderBet).map(item => {
-    const currentPosition = leagueTable.findIndex(teamPosition => teamPosition.nomePopular === item); 
-    return `${item} (${currentPosition + 1}º)`;
-  })
+function getTeamsInCorrectZonesWithPositionInfo(leagueTable: ITeamPositionInfo[], teamsOrderBet: string[], useOriginalZonesInTable: boolean) {
+  const teamsInCorrectZones = getTeamsInCorrectZones(leagueTable, teamsOrderBet, useOriginalZonesInTable);
+  const teamsWithCurrentPositions = [...leagueTable.filter(teamPosition => teamsInCorrectZones.includes(teamPosition.nomePopular))];
+
+  return teamsWithCurrentPositions.map(item =>  `${item.nomePopular} (${item.posicao}º)`);
 }
 
-async function calculateUsersBetScores() {
+async function calculateUsersBetScores(useOriginalZonesInTable: boolean = false) {
   const leagueTable : ITeamPositionInfo[] = await getBrasileiraoTable();
 
   const betsLeagueTable : IBetBrazueraoInfoUser[] = await readBrazueraoSheet();
@@ -65,10 +73,10 @@ async function calculateUsersBetScores() {
     const userScoreInBet : IBetUserClassification = {
       position: 0,
       username: betUserLeagueTable.name,
-      score: calculateScore(leagueTable, betUserLeagueTable.teamsClassification),
+      score: calculateScore(leagueTable, betUserLeagueTable.teamsClassification, useOriginalZonesInTable),
       isCurrentChampionCorrect: currentTeamChampion === currentBetTeamChampion,
       teamsInCorrectsPositions: getTeamsInCorrectPositionsWithPositionInfo(leagueTable, betUserLeagueTable.teamsClassification),
-      teamsInCorrectZones: getTeamsInCorrectZonesWithPositionInfo(leagueTable, betUserLeagueTable.teamsClassification),
+      teamsInCorrectZones: getTeamsInCorrectZonesWithPositionInfo(leagueTable, betUserLeagueTable.teamsClassification, useOriginalZonesInTable),
     } 
     
     userScores.push(userScoreInBet);
@@ -107,7 +115,7 @@ async function calculateUsersBetScores() {
     });
 }
 
-function calculateScore(leagueTable: ITeamPositionInfo[], teamsOrderBet: string[]){
+function calculateScore(leagueTable: ITeamPositionInfo[], teamsOrderBet: string[], useOriginalZonesInTable: boolean){
   const currentTeamChampion = leagueTable.at(0)?.nomePopular;
   const currentBetTeamChampion = teamsOrderBet.at(0);
   const isCurrentChampionCorrect = currentTeamChampion === currentBetTeamChampion;
@@ -129,8 +137,15 @@ function calculateScore(leagueTable: ITeamPositionInfo[], teamsOrderBet: string[
       score += ZoneCorrectScore;
     else if (G4Zone.includes(currentPositionTeam as number) && G4Zone.includes(currentBetPositionTeam))
       score += ZoneCorrectScore;
-    else if ((SulamericanaZone.includes(currentPositionTeam as number) && SulamericanaZone.includes(currentBetPositionTeam))
-      || (NeutralZone.includes(currentPositionTeam as number) && NeutralZone.includes(currentBetPositionTeam)))
+    else if (!useOriginalZonesInTable 
+      && ([...PreLibertadoresZone, ...SulamericanaZone, ...NeutralZone].includes(currentPositionTeam as number) 
+        && [...PreLibertadoresZone, ...SulamericanaZone, ...NeutralZone].includes(currentBetPositionTeam)))
+      score += ZoneCorrectScore;
+    else if (useOriginalZonesInTable && (PreLibertadoresZone.includes(currentPositionTeam as number) && PreLibertadoresZone.includes(currentBetPositionTeam)))
+      score += ZoneCorrectScore;
+    else if (useOriginalZonesInTable && (SulamericanaZone.includes(currentPositionTeam as number) && SulamericanaZone.includes(currentBetPositionTeam)))
+      score += ZoneCorrectScore;
+    else if (useOriginalZonesInTable && (NeutralZone.includes(currentPositionTeam as number) && NeutralZone.includes(currentBetPositionTeam)))
       score += ZoneCorrectScore;
     else if (RelegationZone.includes(currentPositionTeam as number) && RelegationZone.includes(currentBetPositionTeam))
       score += ZoneCorrectScore;  

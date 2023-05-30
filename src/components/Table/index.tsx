@@ -30,7 +30,7 @@ interface ITableComponentProps {
 
 export function TableComponent( { betClassificationUsers, onUpdate } : ITableComponentProps) {
   return (
-    <TableContainer component={Paper} style={{ width: '85vw', border: '1px solid white', marginTop: 20 }}>
+    <TableContainer component={Paper} style={{ width: '85vw', border: '1px solid white' }}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
