@@ -9,7 +9,6 @@ const getItem = (key: string, validStorageTimeInSeconds: number = 2 * 60 * 60) =
 	const bytes = AES.decrypt(item, 'sw');
 	const value = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
-	console.log(value);
 	const limitTimeValidStorage = new Date();
 	limitTimeValidStorage.setSeconds(limitTimeValidStorage.getSeconds() + validStorageTimeInSeconds);
 	const currentDateLocalStorage = new Date(value.date);
