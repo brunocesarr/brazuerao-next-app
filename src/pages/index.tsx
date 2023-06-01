@@ -141,7 +141,7 @@ export default function Home() {
             {usersScore.length > 0 && (
               <Typography variant="body1">
                 Atualizado em{' '}
-                {`${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`}
+                {`${new Date().getDate()}/${(new Date().getMonth() + 1).toString().padStart(2, '0')}/${new Date().getFullYear()}`}
               </Typography>
             )}
           </Box>

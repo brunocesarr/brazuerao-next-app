@@ -1,22 +1,13 @@
-import { UserUrlPhotos } from '@/configs/user-url-photos'
+import { UserUrlPhotos } from '@/configs/user-url-photos';
+import { ZonesClassificationTable } from '@/configs/zones-classification-table';
 
-import {
-  IBetBrazueraoInfoUser,
-  IBetUserClassification,
-  ITeamPositionInfo,
-} from '../interfaces'
-import { getBrasileiraoTable } from '../repositories/brasileirao.repository'
-import { readBrazueraoSheet } from '../repositories/google.repository'
+import { IBetBrazueraoInfoUser, IBetUserClassification, ITeamPositionInfo } from '../interfaces';
+import { getBrasileiraoTable } from '../repositories/brasileirao.repository';
+import { readBrazueraoSheet } from '../repositories/google.repository';
 
 const firstPositionCorrectScore = 3
 const positionCorrectScore = 2
 const ZoneCorrectScore = 1
-
-const G4Zone = [1, 2, 3, 4]
-const PreLibertadoresZone = [5, 6]
-const SulamericanaZone = [7, 8, 9, 10, 11, 12]
-const NeutralZone = [13, 14, 15, 16]
-const RelegationZone = [17, 18, 19, 20]
 
 function getTeamsInCorrectPositions(
   leagueTable: ITeamPositionInfo[],
@@ -46,28 +37,28 @@ function getTeamsInCorrectZones(
       return false
 
     let teamIsCentralZone =
-      [...PreLibertadoresZone, ...SulamericanaZone, ...NeutralZone].includes(
+      [...ZonesClassificationTable.PRE_LIBERTADORES_ZONE, ...ZonesClassificationTable.SULAMERICANA_ZONE, ...ZonesClassificationTable.NEUTRAL_ZONE].includes(
         currentPositionTeam as number
       ) &&
-      [...PreLibertadoresZone, ...SulamericanaZone, ...NeutralZone].includes(
+      [...ZonesClassificationTable.PRE_LIBERTADORES_ZONE, ...ZonesClassificationTable.SULAMERICANA_ZONE, ...ZonesClassificationTable.NEUTRAL_ZONE].includes(
         currentBetPositionTeam
       )
 
     if (useOriginalZonesInTable)
       teamIsCentralZone =
-        (PreLibertadoresZone.includes(currentPositionTeam as number) &&
-          PreLibertadoresZone.includes(currentBetPositionTeam)) ||
-        (SulamericanaZone.includes(currentPositionTeam as number) &&
-          SulamericanaZone.includes(currentBetPositionTeam)) ||
-        (NeutralZone.includes(currentPositionTeam as number) &&
-          NeutralZone.includes(currentBetPositionTeam))
+        (ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(currentPositionTeam as number) &&
+         ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(currentBetPositionTeam)) ||
+        (ZonesClassificationTable.SULAMERICANA_ZONE.includes(currentPositionTeam as number) &&
+         ZonesClassificationTable.SULAMERICANA_ZONE.includes(currentBetPositionTeam)) ||
+        (ZonesClassificationTable.NEUTRAL_ZONE.includes(currentPositionTeam as number) &&
+         ZonesClassificationTable.NEUTRAL_ZONE.includes(currentBetPositionTeam))
 
     return (
-      (G4Zone.includes(currentPositionTeam as number) &&
-        G4Zone.includes(currentBetPositionTeam)) ||
+      (ZonesClassificationTable.G4_ZONE.includes(currentPositionTeam as number) &&
+       ZonesClassificationTable.G4_ZONE.includes(currentBetPositionTeam)) ||
       teamIsCentralZone ||
-      (RelegationZone.includes(currentPositionTeam as number) &&
-        RelegationZone.includes(currentBetPositionTeam))
+      (ZonesClassificationTable.RELEGATION_ZONE.includes(currentPositionTeam as number) &&
+      ZonesClassificationTable.RELEGATION_ZONE.includes(currentBetPositionTeam))
     )
   })
 }
@@ -203,41 +194,41 @@ function calculateScore(
     else if (currentPositionTeam === 0 && !isCurrentChampionCorrect)
       score += ZoneCorrectScore
     else if (
-      G4Zone.includes(currentPositionTeam as number) &&
-      G4Zone.includes(currentBetPositionTeam)
+      ZonesClassificationTable.G4_ZONE.includes(currentPositionTeam as number) &&
+      ZonesClassificationTable.G4_ZONE.includes(currentBetPositionTeam)
     )
       score += ZoneCorrectScore
     else if (
       !useOriginalZonesInTable &&
-      [...PreLibertadoresZone, ...SulamericanaZone, ...NeutralZone].includes(
+      [...ZonesClassificationTable.PRE_LIBERTADORES_ZONE, ...ZonesClassificationTable.SULAMERICANA_ZONE, ...ZonesClassificationTable.NEUTRAL_ZONE].includes(
         currentPositionTeam as number
       ) &&
-      [...PreLibertadoresZone, ...SulamericanaZone, ...NeutralZone].includes(
+      [...ZonesClassificationTable.PRE_LIBERTADORES_ZONE, ...ZonesClassificationTable.SULAMERICANA_ZONE, ...ZonesClassificationTable.NEUTRAL_ZONE].includes(
         currentBetPositionTeam
       )
     )
       score += ZoneCorrectScore
     else if (
       useOriginalZonesInTable &&
-      PreLibertadoresZone.includes(currentPositionTeam as number) &&
-      PreLibertadoresZone.includes(currentBetPositionTeam)
+      ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(currentPositionTeam as number) &&
+      ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(currentBetPositionTeam)
     )
       score += ZoneCorrectScore
     else if (
       useOriginalZonesInTable &&
-      SulamericanaZone.includes(currentPositionTeam as number) &&
-      SulamericanaZone.includes(currentBetPositionTeam)
+      ZonesClassificationTable.SULAMERICANA_ZONE.includes(currentPositionTeam as number) &&
+      ZonesClassificationTable.SULAMERICANA_ZONE.includes(currentBetPositionTeam)
     )
       score += ZoneCorrectScore
     else if (
       useOriginalZonesInTable &&
-      NeutralZone.includes(currentPositionTeam as number) &&
-      NeutralZone.includes(currentBetPositionTeam)
+      ZonesClassificationTable.NEUTRAL_ZONE.includes(currentPositionTeam as number) &&
+      ZonesClassificationTable.NEUTRAL_ZONE.includes(currentBetPositionTeam)
     )
       score += ZoneCorrectScore
     else if (
-      RelegationZone.includes(currentPositionTeam as number) &&
-      RelegationZone.includes(currentBetPositionTeam)
+      ZonesClassificationTable.RELEGATION_ZONE.includes(currentPositionTeam as number) &&
+      ZonesClassificationTable.RELEGATION_ZONE.includes(currentBetPositionTeam)
     )
       score += ZoneCorrectScore
   })
@@ -317,9 +308,27 @@ function getUrlPhotoUrl(username: string) {
   }
 }
 
+async function getBrazilianTable() {
+  const brazilianLeague: ITeamPositionInfo[] = await getBrasileiraoTable();
+
+  return brazilianLeague ?? [];
+}
+
+async function getBrazueraoTableByUser(username: string) {
+  const betsLeagueTable: IBetBrazueraoInfoUser[] = await readBrazueraoSheet();
+
+  const brazueraoTable = betsLeagueTable.find(betLeagueTable => {
+    return betLeagueTable.name.toUpperCase().includes(username.toUpperCase())
+  });
+
+  return brazueraoTable?.teamsClassification ?? [];
+}
+
 export {
   calculateUsersBetScores,
   generateTableRowsBrazuerao,
   generateRowOfTableBrazuerao,
   getUrlPhotoUrl,
+  getBrazilianTable,
+  getBrazueraoTableByUser
 }
