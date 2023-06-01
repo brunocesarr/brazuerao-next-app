@@ -1,9 +1,13 @@
-import { UserUrlPhotos } from '@/configs/user-url-photos';
-import { ZonesClassificationTable } from '@/configs/zones-classification-table';
+import { UserUrlPhotos } from '@/configs/user-url-photos'
+import { ZonesClassificationTable } from '@/configs/zones-classification-table'
 
-import { IBetBrazueraoInfoUser, IBetUserClassification, ITeamPositionInfo } from '../interfaces';
-import { getBrasileiraoTable } from '../repositories/brasileirao.repository';
-import { readBrazueraoSheet } from '../repositories/google.repository';
+import {
+  IBetBrazueraoInfoUser,
+  IBetUserClassification,
+  ITeamPositionInfo,
+} from '../interfaces'
+import { getBrasileiraoTable } from '../repositories/brasileirao.repository'
+import { readBrazueraoSheet } from '../repositories/google.repository'
 
 const firstPositionCorrectScore = 3
 const positionCorrectScore = 2
@@ -37,28 +41,50 @@ function getTeamsInCorrectZones(
       return false
 
     let teamIsCentralZone =
-      [...ZonesClassificationTable.PRE_LIBERTADORES_ZONE, ...ZonesClassificationTable.SULAMERICANA_ZONE, ...ZonesClassificationTable.NEUTRAL_ZONE].includes(
-        currentPositionTeam as number
-      ) &&
-      [...ZonesClassificationTable.PRE_LIBERTADORES_ZONE, ...ZonesClassificationTable.SULAMERICANA_ZONE, ...ZonesClassificationTable.NEUTRAL_ZONE].includes(
-        currentBetPositionTeam
-      )
+      [
+        ...ZonesClassificationTable.PRE_LIBERTADORES_ZONE,
+        ...ZonesClassificationTable.SULAMERICANA_ZONE,
+        ...ZonesClassificationTable.NEUTRAL_ZONE,
+      ].includes(currentPositionTeam as number) &&
+      [
+        ...ZonesClassificationTable.PRE_LIBERTADORES_ZONE,
+        ...ZonesClassificationTable.SULAMERICANA_ZONE,
+        ...ZonesClassificationTable.NEUTRAL_ZONE,
+      ].includes(currentBetPositionTeam)
 
     if (useOriginalZonesInTable)
       teamIsCentralZone =
-        (ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(currentPositionTeam as number) &&
-         ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(currentBetPositionTeam)) ||
-        (ZonesClassificationTable.SULAMERICANA_ZONE.includes(currentPositionTeam as number) &&
-         ZonesClassificationTable.SULAMERICANA_ZONE.includes(currentBetPositionTeam)) ||
-        (ZonesClassificationTable.NEUTRAL_ZONE.includes(currentPositionTeam as number) &&
-         ZonesClassificationTable.NEUTRAL_ZONE.includes(currentBetPositionTeam))
+        (ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(
+          currentPositionTeam as number
+        ) &&
+          ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(
+            currentBetPositionTeam
+          )) ||
+        (ZonesClassificationTable.SULAMERICANA_ZONE.includes(
+          currentPositionTeam as number
+        ) &&
+          ZonesClassificationTable.SULAMERICANA_ZONE.includes(
+            currentBetPositionTeam
+          )) ||
+        (ZonesClassificationTable.NEUTRAL_ZONE.includes(
+          currentPositionTeam as number
+        ) &&
+          ZonesClassificationTable.NEUTRAL_ZONE.includes(
+            currentBetPositionTeam
+          ))
 
     return (
-      (ZonesClassificationTable.G4_ZONE.includes(currentPositionTeam as number) &&
-       ZonesClassificationTable.G4_ZONE.includes(currentBetPositionTeam)) ||
+      (ZonesClassificationTable.G4_ZONE.includes(
+        currentPositionTeam as number
+      ) &&
+        ZonesClassificationTable.G4_ZONE.includes(currentBetPositionTeam)) ||
       teamIsCentralZone ||
-      (ZonesClassificationTable.RELEGATION_ZONE.includes(currentPositionTeam as number) &&
-      ZonesClassificationTable.RELEGATION_ZONE.includes(currentBetPositionTeam))
+      (ZonesClassificationTable.RELEGATION_ZONE.includes(
+        currentPositionTeam as number
+      ) &&
+        ZonesClassificationTable.RELEGATION_ZONE.includes(
+          currentBetPositionTeam
+        ))
     )
   })
 }
@@ -194,40 +220,58 @@ function calculateScore(
     else if (currentPositionTeam === 0 && !isCurrentChampionCorrect)
       score += ZoneCorrectScore
     else if (
-      ZonesClassificationTable.G4_ZONE.includes(currentPositionTeam as number) &&
+      ZonesClassificationTable.G4_ZONE.includes(
+        currentPositionTeam as number
+      ) &&
       ZonesClassificationTable.G4_ZONE.includes(currentBetPositionTeam)
     )
       score += ZoneCorrectScore
     else if (
       !useOriginalZonesInTable &&
-      [...ZonesClassificationTable.PRE_LIBERTADORES_ZONE, ...ZonesClassificationTable.SULAMERICANA_ZONE, ...ZonesClassificationTable.NEUTRAL_ZONE].includes(
+      [
+        ...ZonesClassificationTable.PRE_LIBERTADORES_ZONE,
+        ...ZonesClassificationTable.SULAMERICANA_ZONE,
+        ...ZonesClassificationTable.NEUTRAL_ZONE,
+      ].includes(currentPositionTeam as number) &&
+      [
+        ...ZonesClassificationTable.PRE_LIBERTADORES_ZONE,
+        ...ZonesClassificationTable.SULAMERICANA_ZONE,
+        ...ZonesClassificationTable.NEUTRAL_ZONE,
+      ].includes(currentBetPositionTeam)
+    )
+      score += ZoneCorrectScore
+    else if (
+      useOriginalZonesInTable &&
+      ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(
         currentPositionTeam as number
       ) &&
-      [...ZonesClassificationTable.PRE_LIBERTADORES_ZONE, ...ZonesClassificationTable.SULAMERICANA_ZONE, ...ZonesClassificationTable.NEUTRAL_ZONE].includes(
+      ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(
         currentBetPositionTeam
       )
     )
       score += ZoneCorrectScore
     else if (
       useOriginalZonesInTable &&
-      ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(currentPositionTeam as number) &&
-      ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(currentBetPositionTeam)
+      ZonesClassificationTable.SULAMERICANA_ZONE.includes(
+        currentPositionTeam as number
+      ) &&
+      ZonesClassificationTable.SULAMERICANA_ZONE.includes(
+        currentBetPositionTeam
+      )
     )
       score += ZoneCorrectScore
     else if (
       useOriginalZonesInTable &&
-      ZonesClassificationTable.SULAMERICANA_ZONE.includes(currentPositionTeam as number) &&
-      ZonesClassificationTable.SULAMERICANA_ZONE.includes(currentBetPositionTeam)
-    )
-      score += ZoneCorrectScore
-    else if (
-      useOriginalZonesInTable &&
-      ZonesClassificationTable.NEUTRAL_ZONE.includes(currentPositionTeam as number) &&
+      ZonesClassificationTable.NEUTRAL_ZONE.includes(
+        currentPositionTeam as number
+      ) &&
       ZonesClassificationTable.NEUTRAL_ZONE.includes(currentBetPositionTeam)
     )
       score += ZoneCorrectScore
     else if (
-      ZonesClassificationTable.RELEGATION_ZONE.includes(currentPositionTeam as number) &&
+      ZonesClassificationTable.RELEGATION_ZONE.includes(
+        currentPositionTeam as number
+      ) &&
       ZonesClassificationTable.RELEGATION_ZONE.includes(currentBetPositionTeam)
     )
       score += ZoneCorrectScore
@@ -309,19 +353,19 @@ function getUrlPhotoUrl(username: string) {
 }
 
 async function getBrazilianTable() {
-  const brazilianLeague: ITeamPositionInfo[] = await getBrasileiraoTable();
+  const brazilianLeague: ITeamPositionInfo[] = await getBrasileiraoTable()
 
-  return brazilianLeague ?? [];
+  return brazilianLeague ?? []
 }
 
 async function getBrazueraoTableByUser(username: string) {
-  const betsLeagueTable: IBetBrazueraoInfoUser[] = await readBrazueraoSheet();
+  const betsLeagueTable: IBetBrazueraoInfoUser[] = await readBrazueraoSheet()
 
-  const brazueraoTable = betsLeagueTable.find(betLeagueTable => {
+  const brazueraoTable = betsLeagueTable.find((betLeagueTable) => {
     return betLeagueTable.name.toUpperCase().includes(username.toUpperCase())
-  });
+  })
 
-  return brazueraoTable?.teamsClassification ?? [];
+  return brazueraoTable?.teamsClassification ?? []
 }
 
 export {
@@ -330,5 +374,5 @@ export {
   generateRowOfTableBrazuerao,
   getUrlPhotoUrl,
   getBrazilianTable,
-  getBrazueraoTableByUser
+  getBrazueraoTableByUser,
 }

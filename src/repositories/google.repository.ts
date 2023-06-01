@@ -1,10 +1,10 @@
-import { LocalStorageKeysCache } from '@/configs';
-import { IBetBrazueraoInfoUser } from '@/interfaces';
-import localStorageService from '@/services/localStorage.service';
-import { sheets_v4 } from 'googleapis';
+import { LocalStorageKeysCache } from '@/configs'
+import { IBetBrazueraoInfoUser } from '@/interfaces'
+import localStorageService from '@/services/localStorage.service'
+import { sheets_v4 } from 'googleapis'
 
-import apiGoogleSheet from './base/apiGoogleSheet';
-import { getBrasileiraoTeamsNames } from './brasileirao.repository';
+import apiGoogleSheet from './base/apiGoogleSheet'
+import { getBrasileiraoTeamsNames } from './brasileirao.repository'
 
 async function readBrazueraoSheet() {
   try {
@@ -17,7 +17,9 @@ async function readBrazueraoSheet() {
       return betBrazueraoInfoUsers
 
     const { data: brazueraoSheet } =
-      await apiGoogleSheet.get<sheets_v4.Schema$ValueRange>('/api/brazuerao-league')
+      await apiGoogleSheet.get<sheets_v4.Schema$ValueRange>(
+        '/api/brazuerao-league'
+      )
 
     if (!brazueraoSheet) throw 'Planilha não encontrada!'
 

@@ -1,18 +1,28 @@
-import { ErrorComponent } from '@/components/Error';
-import { TableComponent } from '@/components/Table';
-import { TabPanel } from '@/components/TabPanel';
-import { LocalStorageKeysCache } from '@/configs';
-import { IBetUserClassification } from '@/interfaces';
-import { calculateUsersBetScores, getUrlPhotoUrl } from '@/services/brazuerao.service';
-import localStorageService from '@/services/localStorage.service';
-import SearchRounded from '@mui/icons-material/SearchRounded';
-import { Avatar, Box, Button, Container, Skeleton, Typography } from '@mui/material';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import { Roboto } from 'next/font/google';
-import Head from 'next/head';
-import Image from 'next/image';
-import { useState } from 'react';
+import { ErrorComponent } from '@/components/Error'
+import { TableComponent } from '@/components/Table'
+import { TabPanel } from '@/components/TabPanel'
+import { LocalStorageKeysCache } from '@/configs'
+import { IBetUserClassification } from '@/interfaces'
+import {
+  calculateUsersBetScores,
+  getUrlPhotoUrl,
+} from '@/services/brazuerao.service'
+import localStorageService from '@/services/localStorage.service'
+import SearchRounded from '@mui/icons-material/SearchRounded'
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Skeleton,
+  Typography,
+} from '@mui/material'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
+import { Roboto } from 'next/font/google'
+import Head from 'next/head'
+import Image from 'next/image'
+import { useState } from 'react'
 
 const inter = Roboto({ weight: '400', subsets: ['latin'] })
 
@@ -141,7 +151,9 @@ export default function Home() {
             {usersScore.length > 0 && (
               <Typography variant="body1">
                 Atualizado em{' '}
-                {`${new Date().getDate()}/${(new Date().getMonth() + 1).toString().padStart(2, '0')}/${new Date().getFullYear()}`}
+                {`${new Date().getDate()}/${(new Date().getMonth() + 1)
+                  .toString()
+                  .padStart(2, '0')}/${new Date().getFullYear()}`}
               </Typography>
             )}
           </Box>

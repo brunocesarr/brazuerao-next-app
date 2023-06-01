@@ -1,5 +1,14 @@
-import { AppBar, Box, Container, Skeleton, Tab, Tabs, Toolbar } from '@mui/material';
-import { useRouter } from 'next/router';import Update from '@mui/icons-material/Update'
+import {
+  AppBar,
+  Box,
+  Container,
+  Skeleton,
+  Tab,
+  Tabs,
+  Toolbar,
+} from '@mui/material'
+import { useRouter } from 'next/router'
+import Update from '@mui/icons-material/Update'
 import IconButton from '@mui/material/IconButton'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
@@ -9,16 +18,19 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import { decryptStringValue } from '@/utils/helpers';
-import { useEffect, useState } from 'react';
-import { ErrorComponent } from '@/components/Error';
-import Typography from '@mui/material/Typography';
-import { getBrazilianTable, getBrazueraoTableByUser } from '@/services/brazuerao.service';
-import { ITeamApiInfo, ITeamPositionInfo } from '@/interfaces';
-import { ZonesClassificationTable } from '@/configs/zones-classification-table';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckIcon from '@mui/icons-material/Check';
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import { decryptStringValue } from '@/utils/helpers'
+import { useEffect, useState } from 'react'
+import { ErrorComponent } from '@/components/Error'
+import Typography from '@mui/material/Typography'
+import {
+  getBrazilianTable,
+  getBrazueraoTableByUser,
+} from '@/services/brazuerao.service'
+import { ITeamApiInfo, ITeamPositionInfo } from '@/interfaces'
+import { ZonesClassificationTable } from '@/configs/zones-classification-table'
+import CancelIcon from '@mui/icons-material/Cancel'
+import CheckIcon from '@mui/icons-material/Check'
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -37,70 +49,78 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }))
 
 export default function BetStatusDetail() {
-  const router = useRouter();
-  const username = router.query.user as string;
-  const [brazueraoTable, setBrazueraoTable] = useState<string[]>([]);
-  const [brazilianTable, setBrazilianTable] = useState<ITeamPositionInfo[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter()
+  const username = router.query.user as string
+  const [brazueraoTable, setBrazueraoTable] = useState<string[]>([])
+  const [brazilianTable, setBrazilianTable] = useState<ITeamPositionInfo[]>([])
+  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [zonesInTable, setZonesInTable] = useState('planilha')
 
   useEffect(() => {
     if (!username) {
-      setErrorMessage('User not Found');
-      return;
+      setErrorMessage('User not Found')
+      return
     }
 
-    const getTablesInfo = async() => {
+    const getTablesInfo = async () => {
       try {
-        setIsLoading(true);
-        setErrorMessage('');
-        
-        const brazilianTableResult = await getBrazilianTable();
-        const brazueraoTableResult = await getBrazueraoTableByUser(username);
+        setIsLoading(true)
+        setErrorMessage('')
 
-        setBrazilianTable(brazilianTableResult);
-        setBrazueraoTable(brazueraoTableResult);
+        const brazilianTableResult = await getBrazilianTable()
+        const brazueraoTableResult = await getBrazueraoTableByUser(username)
+
+        setBrazilianTable(brazilianTableResult)
+        setBrazueraoTable(brazueraoTableResult)
       } catch (error) {
         console.log('Inexpect Error. Message: ' + (error as Error).message)
-        throw error;
+        throw error
       }
-    }  
+    }
 
     getTablesInfo()
-      .catch(error => setErrorMessage((error as Error).message))
-      .finally(() => setIsLoading(false));
+      .catch((error) => setErrorMessage((error as Error).message))
+      .finally(() => setIsLoading(false))
   }, [])
 
   const backgroundColorRow = (positionTeam: number) => {
-    const backgroundColorIfZonaCentral = zonesInTable.toLowerCase().includes('planilha') 
+    const backgroundColorIfZonaCentral = zonesInTable
+      .toLowerCase()
+      .includes('planilha')
       ? 'rgb(255, 255, 143, 0.65)'
       : ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(positionTeam)
       ? 'rgb(137, 207, 240, 0.65)'
       : ZonesClassificationTable.SULAMERICANA_ZONE.includes(positionTeam)
       ? 'rgb(255, 255, 143, 0.65)'
       : 'rgb(240, 255, 255, 0.65)'
-    
+
     return ZonesClassificationTable.G4_ZONE.includes(positionTeam)
       ? 'rgba(19, 207, 0, 0.65)'
       : ZonesClassificationTable.RELEGATION_ZONE.includes(positionTeam)
       ? 'rgba(216, 25, 32, 0.65)'
-      : backgroundColorIfZonaCentral;
-  } 
-  
+      : backgroundColorIfZonaCentral
+  }
+
   const colorRow = (positionTeam: number) => {
-    return ZonesClassificationTable.G4_ZONE.includes(positionTeam) || ZonesClassificationTable.RELEGATION_ZONE.includes(positionTeam) ? 'white' : 'black'
+    return ZonesClassificationTable.G4_ZONE.includes(positionTeam) ||
+      ZonesClassificationTable.RELEGATION_ZONE.includes(positionTeam)
+      ? 'white'
+      : 'black'
   }
 
   const borderStyle = (positionTeam: number) => {
-    return ZonesClassificationTable.G4_ZONE.includes(positionTeam) || ZonesClassificationTable.RELEGATION_ZONE.includes(positionTeam) ? '1px solid #999' : 'none'
+    return ZonesClassificationTable.G4_ZONE.includes(positionTeam) ||
+      ZonesClassificationTable.RELEGATION_ZONE.includes(positionTeam)
+      ? '1px solid #999'
+      : 'none'
   }
 
   const handleChangeZonesInTable = async (
     _: React.SyntheticEvent,
     zonesInTable: string
   ) => {
-    setZonesInTable(zonesInTable);
+    setZonesInTable(zonesInTable)
   }
 
   if (isLoading)
@@ -140,11 +160,16 @@ export default function BetStatusDetail() {
           sx={{ mt: 1, backgroundColor: 'grey.900' }}
         />
       </Box>
-    );
+    )
 
   if (errorMessage) return <ErrorComponent errorMessage={errorMessage} />
-  
-  if (!brazueraoTable || brazueraoTable.length === 0 || !brazilianTable || brazilianTable.length === 0)
+
+  if (
+    !brazueraoTable ||
+    brazueraoTable.length === 0 ||
+    !brazilianTable ||
+    brazilianTable.length === 0
+  )
     return (
       <Container fixed>
         <Box
@@ -156,10 +181,13 @@ export default function BetStatusDetail() {
             padding: 5,
           }}
         >
-          <Typography> Nenhum dado encontrado de apostas do {username}</Typography>
+          <Typography>
+            {' '}
+            Nenhum dado encontrado de apostas do {username}
+          </Typography>
         </Box>
       </Container>
-    );
+    )
 
   return (
     <>
@@ -226,7 +254,7 @@ export default function BetStatusDetail() {
                 backgroundColor: 'black',
                 color: 'white',
                 py: 1,
-                borderBottom: '1px solid white'
+                borderBottom: '1px solid white',
               }}
             >
               <Typography>Classificação - Aposta {username}</Typography>
@@ -235,22 +263,32 @@ export default function BetStatusDetail() {
               <TableHead>
                 <TableRow>
                   <StyledTableCell />
-                  <StyledTableCell align="center">Classificação - Aposta</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Classificação - Aposta
+                  </StyledTableCell>
                   <StyledTableCell align="center" />
-                  <StyledTableCell align="center">Classificação - Tempo Real</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Classificação - Tempo Real
+                  </StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {brazueraoTable.map((row, index) => (
                   <StyledTableRow
-                    sx={{ borderTop: borderStyle(index + 1), borderBottom: borderStyle(index + 1) }}
+                    sx={{
+                      borderTop: borderStyle(index + 1),
+                      borderBottom: borderStyle(index + 1),
+                    }}
                   >
                     <StyledTableCell
                       align="center"
                       component="th"
                       scope="row"
                       size="small"
-                      sx={{ backgroundColor: backgroundColorRow(index + 1), color: colorRow(index + 1) }}
+                      sx={{
+                        backgroundColor: backgroundColorRow(index + 1),
+                        color: colorRow(index + 1),
+                      }}
                     >
                       <b>{index + 1}º</b>
                     </StyledTableCell>
@@ -262,10 +300,14 @@ export default function BetStatusDetail() {
                     >
                       {row}
                     </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                    >
-                      {brazilianTable.findIndex(item => item.nomePopular === row) == index ? <CheckIcon fontSize='small' /> : <CancelIcon fontSize='small' />}
+                    <StyledTableCell align="center">
+                      {brazilianTable.findIndex(
+                        (item) => item.nomePopular === row
+                      ) == index ? (
+                        <CheckIcon fontSize="small" />
+                      ) : (
+                        <CancelIcon fontSize="small" />
+                      )}
                     </StyledTableCell>
                     <StyledTableCell
                       align="center"
@@ -283,5 +325,5 @@ export default function BetStatusDetail() {
         </Box>
       </Container>
     </>
-  );
+  )
 }

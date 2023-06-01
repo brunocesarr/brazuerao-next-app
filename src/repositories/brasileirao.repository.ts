@@ -1,9 +1,9 @@
-import { LocalStorageKeysCache } from '@/configs';
-import localStorageService from '@/services/localStorage.service';
+import { LocalStorageKeysCache } from '@/configs'
+import localStorageService from '@/services/localStorage.service'
 
-import { ITeamPositionApiInfo, ITeamPositionInfo } from '../interfaces';
-import apiBrasileiraoGloboEsporte from './base/apiBrasileiraoGloboEsporte';
-import apiFutebol from './base/apiFutebol';
+import { ITeamPositionApiInfo, ITeamPositionInfo } from '../interfaces'
+import apiBrasileiraoGloboEsporte from './base/apiBrasileiraoGloboEsporte'
+import apiFutebol from './base/apiFutebol'
 
 async function getBrasileiraoTeamsNames(): Promise<string[] | undefined> {
   try {
