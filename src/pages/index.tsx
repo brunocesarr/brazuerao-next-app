@@ -1,28 +1,17 @@
-import { ErrorComponent } from '@/components/Error'
-import { TableComponent } from '@/components/Table'
-import { TabPanel } from '@/components/TabPanel'
-import { LocalStorageKeysCache } from '@/configs'
-import { IBetUserClassification } from '@/interfaces'
-import {
-  calculateUsersBetScores,
-  getUrlPhotoUrl,
-} from '@/services/brazuerao.service'
-import localStorageService from '@/services/localStorage.service'
-import SearchRounded from '@mui/icons-material/SearchRounded'
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Skeleton,
-  Typography,
-} from '@mui/material'
-import Tab from '@mui/material/Tab'
-import Tabs from '@mui/material/Tabs'
-import { Roboto } from 'next/font/google'
-import Head from 'next/head'
-import Image from 'next/image'
-import { useState } from 'react'
+import { ErrorComponent } from '@/components/Error';
+import { TableComponent } from '@/components/Table';
+import { TabPanel } from '@/components/TabPanel';
+import { LocalStorageKeysCache } from '@/configs';
+import { IBetUserClassification } from '@/interfaces';
+import { calculateUsersBetScores, getUrlPhotoUrl } from '@/services/brazuerao.service';
+import localStorageService from '@/services/localStorage.service';
+import SearchRounded from '@mui/icons-material/SearchRounded';
+import { Avatar, Box, Button, Container, Skeleton, Typography } from '@mui/material';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import { Roboto } from 'next/font/google';
+import Image from 'next/image';
+import { useState } from 'react';
 
 const inter = Roboto({ weight: '400', subsets: ['latin'] })
 
@@ -117,12 +106,6 @@ export default function Home() {
 
   return (
     <>
-      <Head>
-        <title>{`Brazuerao Apostas - ${new Date().getFullYear()}`}</title>
-        <meta name="description" content="Republica TDT - Brazuerão Apostas" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo.ico" />
-      </Head>
       <main className={`${inter.className}`}>
         <Container fixed>
           <Box

@@ -1,11 +1,14 @@
-import { Box, Button, Container, Typography } from '@mui/material'
-import Grid from '@mui/material/Grid'
-import Image from 'next/image'
-import React from 'react'
+import { Box, Button, Container, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 export function ErrorComponent({ errorMessage }: { errorMessage: string }) {
+  const router = useRouter();
+
   function refreshPage() {
-    window.location.reload()
+    router.push('/');
   }
 
   return (
@@ -20,6 +23,7 @@ export function ErrorComponent({ errorMessage }: { errorMessage: string }) {
       <Container maxWidth="md">
         <Grid container spacing={2}>
           <Grid
+            item
             xs={6}
             sx={{
               display: 'flex',
@@ -50,7 +54,7 @@ export function ErrorComponent({ errorMessage }: { errorMessage: string }) {
               Back Home
             </Button>
           </Grid>
-          <Grid xs={6}>
+          <Grid item xs={6}>
             <Image
               src="https://img.freepik.com/free-vector/500-internal-server-error-concept-illustration_114360-1885.jpg?w=2000"
               alt=""

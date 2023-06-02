@@ -1,13 +1,9 @@
-import { UserUrlPhotos } from '@/configs/user-url-photos'
-import { ZonesClassificationTable } from '@/configs/zones-classification-table'
+import { UserUrlPhotos } from '@/configs/user-url-photos';
+import { ZonesClassificationTable } from '@/configs/zones-classification-table';
 
-import {
-  IBetBrazueraoInfoUser,
-  IBetUserClassification,
-  ITeamPositionInfo,
-} from '../interfaces'
-import { getBrasileiraoTable } from '../repositories/brasileirao.repository'
-import { readBrazueraoSheet } from '../repositories/google.repository'
+import { IBetBrazueraoInfoUser, IBetUserClassification, ITeamPositionInfo } from '../interfaces';
+import { getBrasileiraoTable } from '../repositories/brasileirao.repository';
+import { readBrazueraoSheet } from '../repositories/google.repository';
 
 const firstPositionCorrectScore = 3
 const positionCorrectScore = 2
@@ -336,16 +332,17 @@ function generateRowOfTableBrazuerao(
 }
 
 function getUrlPhotoUrl(username: string) {
+  username = username.toLowerCase();
   switch (username) {
-    case 'Anderson':
+    case 'anderson':
       return UserUrlPhotos.ANDERSON_PHOTO_URL
-    case 'Ailton':
+    case 'ailton':
       return UserUrlPhotos.AILTON_PHOTO_URL
-    case 'Bruno':
+    case 'bruno':
       return UserUrlPhotos.BRUNO_PHOTO_URL
-    case 'Lucas':
+    case 'lucas':
       return UserUrlPhotos.LUCAS_PHOTO_URL
-    case 'Dedé':
+    case 'dedé':
       return UserUrlPhotos.DEDE_PHOTO_URL
     default:
       return ''
@@ -375,4 +372,5 @@ export {
   getUrlPhotoUrl,
   getBrazilianTable,
   getBrazueraoTableByUser,
+  getTeamsInCorrectZones
 }

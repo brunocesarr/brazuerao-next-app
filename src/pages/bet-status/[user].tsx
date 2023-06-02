@@ -1,36 +1,28 @@
-import {
-  AppBar,
-  Box,
-  Container,
-  Skeleton,
-  Tab,
-  Tabs,
-  Toolbar,
-} from '@mui/material'
-import { useRouter } from 'next/router'
-import Update from '@mui/icons-material/Update'
-import IconButton from '@mui/material/IconButton'
-import Paper from '@mui/material/Paper'
-import { styled } from '@mui/material/styles'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell, { tableCellClasses } from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import { decryptStringValue } from '@/utils/helpers'
-import { useEffect, useState } from 'react'
-import { ErrorComponent } from '@/components/Error'
-import Typography from '@mui/material/Typography'
+import { ErrorComponent } from '@/components/Error';
+import { ZonesClassificationTable } from '@/configs/zones-classification-table';
+import { ITeamPositionInfo } from '@/interfaces';
 import {
   getBrazilianTable,
   getBrazueraoTableByUser,
-} from '@/services/brazuerao.service'
-import { ITeamApiInfo, ITeamPositionInfo } from '@/interfaces'
-import { ZonesClassificationTable } from '@/configs/zones-classification-table'
-import CancelIcon from '@mui/icons-material/Cancel'
-import CheckIcon from '@mui/icons-material/Check'
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
+  getTeamsInCorrectZones,
+  getUrlPhotoUrl,
+} from '@/services/brazuerao.service';
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckIcon from '@mui/icons-material/Check';
+import { AppBar, Avatar, Box, Container, Skeleton, Tab, Tabs, Toolbar } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -44,17 +36,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+    // backgroundColor: theme.palette.action.hover,
   },
 }))
 
 export default function BetStatusDetail() {
   const router = useRouter()
-  const username = router.query.user as string
+  const username = (router.query.user as string)?.charAt(0).toUpperCase() + (router.query.user as string)?.slice(1)
   const [brazueraoTable, setBrazueraoTable] = useState<string[]>([])
   const [brazilianTable, setBrazilianTable] = useState<ITeamPositionInfo[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [zonesInTable, setZonesInTable] = useState('planilha')
 
   useEffect(() => {
@@ -123,7 +115,11 @@ export default function BetStatusDetail() {
     setZonesInTable(zonesInTable)
   }
 
-  if (isLoading)
+  const getTeamsInCorrectZonesByUser = () => {
+    return getTeamsInCorrectZones(brazilianTable, brazueraoTable, !zonesInTable.includes('planilha'));
+  }
+
+  const renderIfIsLoadingPage = () => {
     return (
       <Box
         sx={{
@@ -140,27 +136,22 @@ export default function BetStatusDetail() {
           sx={{ backgroundColor: 'grey.900' }}
         />
         <Skeleton
-          animation="wave"
-          height={30}
-          width="20%"
-          sx={{ backgroundColor: 'grey.900' }}
-        />
-        <Skeleton
           variant="rectangular"
           animation="wave"
           height={60}
-          width="100%"
+          width="85vw"
           sx={{ backgroundColor: 'grey.900' }}
         />
         <Skeleton
           variant="rectangular"
           animation="wave"
           height={300}
-          width="100%"
+          width="85vw"
           sx={{ mt: 1, backgroundColor: 'grey.900' }}
         />
       </Box>
-    )
+    );
+  }
 
   if (errorMessage) return <ErrorComponent errorMessage={errorMessage} />
 
@@ -191,7 +182,7 @@ export default function BetStatusDetail() {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1, mb: 5 }}>
         <AppBar position="static" sx={{ backgroundColor: 'grey.900' }}>
           <Toolbar>
             <IconButton
@@ -208,121 +199,184 @@ export default function BetStatusDetail() {
         </AppBar>
       </Box>
       <Container fixed>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}
-        >
-          <Tabs
-            value={zonesInTable}
-            onChange={handleChangeZonesInTable}
-            aria-label="tabs brazuerao table"
-            indicatorColor="secondary"
-            textColor="inherit"
-            variant="fullWidth"
-            centered
-            sx={{
-              backgroundColor: 'black',
-              color: 'white',
-              width: '85vw',
-              border: '1px solid gray',
-            }}
-          >
-            <Tab
-              label="Zonas Customizadas (Planilha)"
-              value="planilha"
-              tabIndex={0}
-            />
-            <Tab
-              label="Zonas Original (Tabela GE)"
-              value="original"
-              tabIndex={1}
-            />
-          </Tabs>
-          <TableContainer
-            component={Paper}
-            style={{ width: '85vw', border: '1px solid white' }}
-          >
+        {isLoading ? (
+          renderIfIsLoadingPage()
+        ) : (
+          <>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection: 'row',
+                width: '100%',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  width: '10vw',
+                  mx: 10,
+                  my: 2,
+                }}
+              >
+                <Avatar
+                  alt={username}
+                  src={getUrlPhotoUrl(username)}
+                  sx={{ width: 60, height: 60, backgroundColor: 'red', m: 1 }}
+                  variant="circular"
+                />
+                <Typography variant="body1"><b>{username}</b></Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  width: '90vw',
+                }}
+              >
+                <Typography variant="h6" sx={{ mx: 5 }}>Times em zonas corretas:</Typography>
+                <Typography variant="body2">{getTeamsInCorrectZonesByUser().join(', ')}</Typography>
+              </Box>
+            </Box>
             <Box
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: 'black',
-                color: 'white',
-                py: 1,
-                borderBottom: '1px solid white',
+                flexDirection: 'column',
               }}
             >
-              <Typography>Classificação - Aposta {username}</Typography>
+              <Tabs
+                value={zonesInTable}
+                onChange={handleChangeZonesInTable}
+                aria-label="tabs brazuerao table"
+                indicatorColor="secondary"
+                textColor="inherit"
+                variant="fullWidth"
+                centered
+                sx={{
+                  backgroundColor: 'black',
+                  color: 'white',
+                  width: '85vw',
+                  border: '1px solid gray',
+                }}
+              >
+                <Tab
+                  label="Zonas Customizadas (Planilha)"
+                  value="planilha"
+                  tabIndex={0}
+                />
+                <Tab
+                  label="Zonas Original (Tabela GE)"
+                  value="original"
+                  tabIndex={1}
+                />
+              </Tabs>
+              <TableContainer
+                component={Paper}
+                style={{ width: '85vw', border: '1px solid white' }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'black',
+                    color: 'white',
+                    py: 1,
+                    borderBottom: '1px solid white',
+                  }}
+                >
+                  <Typography>Classificação - Aposta {username}</Typography>
+                </Box>
+                <Table aria-label="collapsible table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell />
+                      <StyledTableCell align="center">
+                        Classificação - Aposta
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Posição Correta?
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        Classificação - Tempo Real
+                      </StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {brazueraoTable.map((row, index) => (
+                      <StyledTableRow
+                        key={row}
+                        sx={{
+                          borderTop: borderStyle(index + 1),
+                          borderBottom: borderStyle(index + 1),
+                        }}
+                      >
+                        <StyledTableCell
+                          align="center"
+                          component="th"
+                          scope="row"
+                          size="small"
+                          sx={{
+                            backgroundColor: backgroundColorRow(index + 1),
+                            color: colorRow(index + 1),
+                          }}
+                        >
+                          <b>{index + 1}º</b>
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="center"
+                          component="th"
+                          scope="row"
+                          sx={{ 
+                            width: '40vw',
+                            backgroundColor: getTeamsInCorrectZonesByUser().includes(row) ? 'grey.200' : 'inherit',
+                         }}
+                        >
+                          {row}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {brazilianTable.findIndex(
+                            (item) => item.nomePopular === row
+                          ) == index ? (
+                            <CheckIcon fontSize="small" />
+                          ) : (
+                            <CancelIcon fontSize="small" />
+                          )}
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="center"
+                          component="th"
+                          scope="row"
+                          sx={{ width: '40vw' }}
+                        >
+                          {brazilianTable[index].nomePopular}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                }}
+              >
+                <Typography>Legenda:</Typography>
+                <Box sx={{ backgroundColor: 'grey.200', width: 10, height: 10, marginLeft: 5, marginRight: 1 }} />
+                <Typography>Times em zonas corretas</Typography>
+              </Box>
             </Box>
-            <Table aria-label="collapsible table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell />
-                  <StyledTableCell align="center">
-                    Classificação - Aposta
-                  </StyledTableCell>
-                  <StyledTableCell align="center" />
-                  <StyledTableCell align="center">
-                    Classificação - Tempo Real
-                  </StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {brazueraoTable.map((row, index) => (
-                  <StyledTableRow
-                    sx={{
-                      borderTop: borderStyle(index + 1),
-                      borderBottom: borderStyle(index + 1),
-                    }}
-                  >
-                    <StyledTableCell
-                      align="center"
-                      component="th"
-                      scope="row"
-                      size="small"
-                      sx={{
-                        backgroundColor: backgroundColorRow(index + 1),
-                        color: colorRow(index + 1),
-                      }}
-                    >
-                      <b>{index + 1}º</b>
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      component="th"
-                      scope="row"
-                      sx={{ width: '40vw' }}
-                    >
-                      {row}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {brazilianTable.findIndex(
-                        (item) => item.nomePopular === row
-                      ) == index ? (
-                        <CheckIcon fontSize="small" />
-                      ) : (
-                        <CancelIcon fontSize="small" />
-                      )}
-                    </StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      component="th"
-                      scope="row"
-                      sx={{ width: '40vw' }}
-                    >
-                      {brazilianTable[index].nomePopular}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
+          </>
+        )}
       </Container>
     </>
   )
