@@ -32,6 +32,12 @@ export function TableComponent({
   betClassificationUsers,
   onUpdate,
 }: ITableComponentProps) {
+  const getLastUserScores = () => {
+    const lastPosition = betClassificationUsers[betClassificationUsers.length - 1].position
+    const lastUserScores = betClassificationUsers.filter(userScore => userScore.position === lastPosition)
+    return lastUserScores;
+  }
+
   return (
     <TableContainer
       component={Paper}
@@ -76,7 +82,7 @@ export function TableComponent({
               betClassificationUser={betClassificationUser}
               isFirst={betClassificationUser.position === 1}
               isLast={
-                betClassificationUser.position === betClassificationUsers.length
+                getLastUserScores().some(userScore => userScore.position === betClassificationUser.position)
               }
             />
           ))}

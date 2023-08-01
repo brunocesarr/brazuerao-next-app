@@ -102,6 +102,12 @@ export default function Home() {
     )
   }
 
+  const getLastUserScores = () => {
+    const lastPosition = usersScore[usersScore.length - 1].position
+    const lastUserScores = usersScore.filter(userScore => userScore.position === lastPosition)
+    return lastUserScores;
+  }
+
   if (errorMessage) return <ErrorComponent errorMessage={errorMessage} />
 
   return (
@@ -152,20 +158,42 @@ export default function Home() {
               }}
             >
               <>
-                <Avatar
-                  alt={usersScore[usersScore.length - 1].username}
-                  src={getUrlPhotoUrl(
-                    usersScore[usersScore.length - 1].username
-                  )}
-                  sx={{ width: 60, height: 60, backgroundColor: 'red', mb: 1 }}
-                  variant="rounded"
-                />
                 <Typography variant="body1">
-                  Pagador (até agora):{' '}
-                  <b>
-                    {usersScore[usersScore.length - 1].username.toUpperCase()}
-                  </b>
+                  Pagador(es) (até agora):{' '}
                 </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    mt: 2
+                  }}
+                >
+                  {getLastUserScores().map(userScore => {
+                    return (
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          flexDirection: 'column',
+                          mx: 2
+                        }}
+                      >
+                        <Avatar
+                          alt={userScore.username}
+                          src={getUrlPhotoUrl(userScore.username)}
+                          sx={{ width: 60, height: 60, backgroundColor: 'red', mb: 1 }}
+                          variant="rounded"
+                        />
+                        <b>
+                          {userScore.username.toUpperCase()} 
+                        </b>                    
+                      </Box>
+                    )
+                  })}
+                </Box>
               </>
               <Box sx={{ borderBottom: 1, borderColor: 'divider', mt: 5 }}>
                 <Tabs
