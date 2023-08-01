@@ -1,10 +1,14 @@
-import { UserUrlPhotos } from '@/configs/user-url-photos';
-import { ZonesClassificationTable } from '@/configs/zones-classification-table';
+import { UserUrlPhotos } from '@/configs/user-url-photos'
+import { ZonesClassificationTable } from '@/configs/zones-classification-table'
 
-import { IBetBrazueraoInfoUser, IBetUserClassification, ITeamPositionInfo } from '../interfaces';
-import { getBrasileiraoTable } from '../repositories/brasileirao.repository';
-import { readBrazueraoSheet } from '../repositories/google.repository';
-import { groupBy } from '@/utils/helpers';
+import {
+  IBetBrazueraoInfoUser,
+  IBetUserClassification,
+  ITeamPositionInfo,
+} from '../interfaces'
+import { getBrasileiraoTable } from '../repositories/brasileirao.repository'
+import { readBrazueraoSheet } from '../repositories/google.repository'
+import { groupBy } from '@/utils/helpers'
 
 const firstPositionCorrectScore = 3
 const positionCorrectScore = 2
@@ -156,7 +160,7 @@ async function calculateUsersBetScores(
     userScores.push(userScoreInBet)
   })
 
-  return reorderUserByScore(userScores);
+  return reorderUserByScore(userScores)
 }
 
 function reorderUserByScore(userScores: IBetUserClassification[]) {
@@ -191,14 +195,19 @@ function reorderUserByScore(userScores: IBetUserClassification[]) {
       return userScore
     })
 
-  const userScoreGroup = groupBy(userScores, (userScore) => `${userScore.score}-${userScore.teamsInCorrectsPositions.length}-${userScore.teamsInCorrectZones.length}`);
+  const userScoreGroup = groupBy(
+    userScores,
+    (userScore) =>
+      `${userScore.score}-${userScore.teamsInCorrectsPositions.length}-${userScore.teamsInCorrectZones.length}`
+  )
 
-  return userScores
-    .map((userScore) => {
-      const minPosition = userScoreGroup[`${userScore.score}-${userScore.teamsInCorrectsPositions.length}-${userScore.teamsInCorrectZones.length}`].sort((a, b) => a.position - b.position)[0].position
-      userScore.position = minPosition
-      return userScore
-    })
+  return userScores.map((userScore) => {
+    const minPosition = userScoreGroup[
+      `${userScore.score}-${userScore.teamsInCorrectsPositions.length}-${userScore.teamsInCorrectZones.length}`
+    ].sort((a, b) => a.position - b.position)[0].position
+    userScore.position = minPosition
+    return userScore
+  })
 }
 
 function calculateScore(
@@ -346,7 +355,7 @@ function generateRowOfTableBrazuerao(
 }
 
 function getUrlPhotoUrl(username: string) {
-  username = username.toLowerCase();
+  username = username.toLowerCase()
   switch (username) {
     case 'anderson':
       return UserUrlPhotos.ANDERSON_PHOTO_URL
@@ -386,5 +395,5 @@ export {
   getUrlPhotoUrl,
   getBrazilianTable,
   getBrazueraoTableByUser,
-  getTeamsInCorrectZones
+  getTeamsInCorrectZones,
 }

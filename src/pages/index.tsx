@@ -1,17 +1,27 @@
-import { ErrorComponent } from '@/components/Error';
-import { TableComponent } from '@/components/Table';
-import { TabPanel } from '@/components/TabPanel';
-import { LocalStorageKeysCache } from '@/configs';
-import { IBetUserClassification } from '@/interfaces';
-import { calculateUsersBetScores, getUrlPhotoUrl } from '@/services/brazuerao.service';
-import localStorageService from '@/services/localStorage.service';
-import SearchRounded from '@mui/icons-material/SearchRounded';
-import { Avatar, Box, Button, Container, Skeleton, Typography } from '@mui/material';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import { Roboto } from 'next/font/google';
-import Image from 'next/image';
-import { useState } from 'react';
+import { ErrorComponent } from '@/components/Error'
+import { TableComponent } from '@/components/Table'
+import { TabPanel } from '@/components/TabPanel'
+import { LocalStorageKeysCache } from '@/configs'
+import { IBetUserClassification } from '@/interfaces'
+import {
+  calculateUsersBetScores,
+  getUrlPhotoUrl,
+} from '@/services/brazuerao.service'
+import localStorageService from '@/services/localStorage.service'
+import SearchRounded from '@mui/icons-material/SearchRounded'
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Skeleton,
+  Typography,
+} from '@mui/material'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
+import { Roboto } from 'next/font/google'
+import Image from 'next/image'
+import { useState } from 'react'
 
 const inter = Roboto({ weight: '400', subsets: ['latin'] })
 
@@ -104,8 +114,10 @@ export default function Home() {
 
   const getLastUserScores = () => {
     const lastPosition = usersScore[usersScore.length - 1].position
-    const lastUserScores = usersScore.filter(userScore => userScore.position === lastPosition)
-    return lastUserScores;
+    const lastUserScores = usersScore.filter(
+      (userScore) => userScore.position === lastPosition
+    )
+    return lastUserScores
   }
 
   if (errorMessage) return <ErrorComponent errorMessage={errorMessage} />
@@ -167,10 +179,10 @@ export default function Home() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     flexDirection: 'row',
-                    mt: 2
+                    mt: 2,
                   }}
                 >
-                  {getLastUserScores().map(userScore => {
+                  {getLastUserScores().map((userScore) => {
                     return (
                       <Box
                         sx={{
@@ -178,18 +190,21 @@ export default function Home() {
                           justifyContent: 'center',
                           alignItems: 'center',
                           flexDirection: 'column',
-                          mx: 2
+                          mx: 2,
                         }}
                       >
                         <Avatar
                           alt={userScore.username}
                           src={getUrlPhotoUrl(userScore.username)}
-                          sx={{ width: 60, height: 60, backgroundColor: 'red', mb: 1 }}
+                          sx={{
+                            width: 60,
+                            height: 60,
+                            backgroundColor: 'red',
+                            mb: 1,
+                          }}
                           variant="rounded"
                         />
-                        <b>
-                          {userScore.username.toUpperCase()} 
-                        </b>                    
+                        <b>{userScore.username.toUpperCase()}</b>
                       </Box>
                     )
                   })}

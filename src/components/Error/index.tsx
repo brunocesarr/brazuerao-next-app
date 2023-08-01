@@ -1,14 +1,14 @@
-import { Box, Button, Container, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import React from 'react';
+import { Box, Button, Container, Typography } from '@mui/material'
+import Grid from '@mui/material/Grid'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import React from 'react'
 
 export function ErrorComponent({ errorMessage }: { errorMessage: string }) {
-  const router = useRouter();
+  const router = useRouter()
 
   function refreshPage() {
-    router.push('/');
+    router.push('/')
   }
 
   return (

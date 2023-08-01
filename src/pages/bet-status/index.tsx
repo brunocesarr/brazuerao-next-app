@@ -1,28 +1,37 @@
-import { ErrorComponent } from '@/components/Error';
-import { ZonesClassificationTable } from '@/configs/zones-classification-table';
-import { ITeamPositionInfo } from '@/interfaces';
+import { ErrorComponent } from '@/components/Error'
+import { ZonesClassificationTable } from '@/configs/zones-classification-table'
+import { ITeamPositionInfo } from '@/interfaces'
 import {
   getBrazilianTable,
   getBrazueraoTableByUser,
   getTeamsInCorrectZones,
   getUrlPhotoUrl,
-} from '@/services/brazuerao.service';
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckIcon from '@mui/icons-material/Check';
-import { AppBar, Avatar, Box, Container, Skeleton, Tab, Tabs, Toolbar } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+} from '@/services/brazuerao.service'
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
+import CancelIcon from '@mui/icons-material/Cancel'
+import CheckIcon from '@mui/icons-material/Check'
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Container,
+  Skeleton,
+  Tab,
+  Tabs,
+  Toolbar,
+} from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import Paper from '@mui/material/Paper'
+import { styled } from '@mui/material/styles'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell, { tableCellClasses } from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Typography from '@mui/material/Typography'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -44,7 +53,7 @@ interface IBetStatusDetail {
   username: string
 }
 
-export default function BetStatusDetail({username}: IBetStatusDetail) {
+export default function BetStatusDetail({ username }: IBetStatusDetail) {
   const router = useRouter()
   const [brazueraoTable, setBrazueraoTable] = useState<string[]>([])
   const [brazilianTable, setBrazilianTable] = useState<ITeamPositionInfo[]>([])
@@ -119,7 +128,11 @@ export default function BetStatusDetail({username}: IBetStatusDetail) {
   }
 
   const getTeamsInCorrectZonesByUser = () => {
-    return getTeamsInCorrectZones(brazilianTable, brazueraoTable, !zonesInTable.includes('planilha'));
+    return getTeamsInCorrectZones(
+      brazilianTable,
+      brazueraoTable,
+      !zonesInTable.includes('planilha')
+    )
   }
 
   const renderIfIsLoadingPage = () => {
@@ -153,16 +166,17 @@ export default function BetStatusDetail({username}: IBetStatusDetail) {
           sx={{ mt: 1, backgroundColor: 'grey.900' }}
         />
       </Box>
-    );
+    )
   }
 
   if (errorMessage) return <ErrorComponent errorMessage={errorMessage} />
 
   if (
-    !brazueraoTable ||
-    brazueraoTable.length === 0 ||
-    !brazilianTable ||
-    brazilianTable.length === 0
+    !isLoading &&
+    (!brazueraoTable ||
+      brazueraoTable.length === 0 ||
+      !brazilianTable ||
+      brazilianTable.length === 0)
   )
     return (
       <Container fixed>
@@ -231,7 +245,9 @@ export default function BetStatusDetail({username}: IBetStatusDetail) {
                   sx={{ width: 60, height: 60, backgroundColor: 'red', m: 1 }}
                   variant="circular"
                 />
-                <Typography variant="body1"><b>{username}</b></Typography>
+                <Typography variant="body1">
+                  <b>{username}</b>
+                </Typography>
               </Box>
               <Box
                 sx={{
@@ -241,8 +257,12 @@ export default function BetStatusDetail({username}: IBetStatusDetail) {
                   width: '90vw',
                 }}
               >
-                <Typography variant="h6" sx={{ mx: 5 }}>Times em zonas corretas:</Typography>
-                <Typography variant="body2">{getTeamsInCorrectZonesByUser().join(', ')}</Typography>
+                <Typography variant="h6" sx={{ mx: 5 }}>
+                  Times em zonas corretas:
+                </Typography>
+                <Typography variant="body2">
+                  {getTeamsInCorrectZonesByUser().join(', ')}
+                </Typography>
               </Box>
             </Box>
             <Box
@@ -336,10 +356,13 @@ export default function BetStatusDetail({username}: IBetStatusDetail) {
                           align="center"
                           component="th"
                           scope="row"
-                          sx={{ 
+                          sx={{
                             width: '40vw',
-                            backgroundColor: getTeamsInCorrectZonesByUser().includes(row) ? 'grey.200' : 'inherit',
-                         }}
+                            backgroundColor:
+                              getTeamsInCorrectZonesByUser().includes(row)
+                                ? 'grey.200'
+                                : 'inherit',
+                          }}
                         >
                           {row}
                         </StyledTableCell>
@@ -374,7 +397,15 @@ export default function BetStatusDetail({username}: IBetStatusDetail) {
                 }}
               >
                 <Typography>Legenda:</Typography>
-                <Box sx={{ backgroundColor: 'grey.200', width: 10, height: 10, marginLeft: 5, marginRight: 1 }} />
+                <Box
+                  sx={{
+                    backgroundColor: 'grey.200',
+                    width: 10,
+                    height: 10,
+                    marginLeft: 5,
+                    marginRight: 1,
+                  }}
+                />
                 <Typography>Times em zonas corretas</Typography>
               </Box>
             </Box>
@@ -386,7 +417,12 @@ export default function BetStatusDetail({username}: IBetStatusDetail) {
 }
 
 export async function getServerSideProps(context: any) {
-  const { user } = context.query;
-  console.log(`Fetched user: ${user}`);
-  return { props: { username: (user as string)?.charAt(0).toUpperCase() + (user as string)?.slice(1) } };
+  const { user } = context.query
+  console.log(`Fetched user: ${user}`)
+  return {
+    props: {
+      username:
+        (user as string)?.charAt(0).toUpperCase() + (user as string)?.slice(1),
+    },
+  }
 }
