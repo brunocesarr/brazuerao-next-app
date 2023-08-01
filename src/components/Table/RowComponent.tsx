@@ -121,7 +121,7 @@ export function RowComponent({
               aria-label="bet details row"
               size="small"
               onClick={() =>
-                router.push(`/bet-status/${row.name.toLowerCase()}`)
+                router.push(`/bet-status?user=${row.name.toLowerCase()}`)
               }
             >
               <OpenInNewIcon />

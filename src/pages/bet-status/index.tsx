@@ -40,9 +40,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }))
 
-export default function BetStatusDetail() {
+interface IBetStatusDetail {
+  username: string
+}
+
+export default function BetStatusDetail({username}: IBetStatusDetail) {
   const router = useRouter()
-  const username = (router.query.user as string)?.charAt(0).toUpperCase() + (router.query.user as string)?.slice(1)
   const [brazueraoTable, setBrazueraoTable] = useState<string[]>([])
   const [brazilianTable, setBrazilianTable] = useState<ITeamPositionInfo[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -380,4 +383,10 @@ export default function BetStatusDetail() {
       </Container>
     </>
   )
+}
+
+export async function getServerSideProps(context: any) {
+  const { user } = context.query;
+  console.log(`Fetched user: ${user}`);
+  return { props: { username: (user as string)?.charAt(0).toUpperCase() + (user as string)?.slice(1) } };
 }
