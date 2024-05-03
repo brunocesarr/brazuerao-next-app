@@ -21,10 +21,10 @@ async function readBrazueraoSheet(year: number) {
         `/api/brazuerao-league/${year}`
       )
 
-    if (!brazueraoSheet) throw 'Planilha não encontrada!'
+    if (!brazueraoSheet) throw 'Sheet no found!'
 
     const rows = brazueraoSheet.values
-    if (!rows || rows.length === 0) throw 'Planilha vazia!'
+    if (!rows || rows.length === 0) throw 'Empty Sheet!'
 
     betBrazueraoInfoUsers = []
     const betNumPlayers = rows[0].length
@@ -37,11 +37,14 @@ async function readBrazueraoSheet(year: number) {
       betBrazueraoInfoUsers.push(betTeamsInfoUser)
     }
 
+    const teams = await getBrasileiraoTeamsNames()
+    if (!teams || teams.length === 0) throw new Error('Brazilian league teams not found')
+
     betBrazueraoInfoUsers = await Promise.all(
       betBrazueraoInfoUsers.map(async (betBrazueraoInfoUser) => {
         const { teamsClassification } = betBrazueraoInfoUser
         betBrazueraoInfoUser.teamsClassification =
-          await formatTeamsNames(teamsClassification)
+          await formatTeamsNames(teamsClassification, teams)
         return betBrazueraoInfoUser
       })
     )
@@ -57,11 +60,9 @@ async function readBrazueraoSheet(year: number) {
   }
 }
 
-async function formatTeamsNames(teamsNames: string[]): Promise<string[]> {
-  const teams = await getBrasileiraoTeamsNames()
-  if (!teams) throw new Error('Nenhuma equipe encontrada')
+async function formatTeamsNames(teamsNames: string[], correctTeams: string[]): Promise<string[]> {
   return await Promise.all(
-    teamsNames.map(async (teamName) => await formatTeamName(teamName, teams))
+    teamsNames.map(async (teamName) => await formatTeamName(teamName, correctTeams))
   )
 }
 
