@@ -58,17 +58,15 @@ async function readBrazueraoSheet(year: number) {
 }
 
 async function formatTeamsNames(teamsNames: string[]): Promise<string[]> {
+  const teams = await getBrasileiraoTeamsNames()
+  if (!teams) throw new Error('Nenhuma equipe encontrada')
   return await Promise.all(
-    teamsNames.map(async (teamName) => await formatTeamName(teamName))
+    teamsNames.map(async (teamName) => await formatTeamName(teamName, teams))
   )
 }
 
-async function formatTeamName(nameTeam: string) {
+async function formatTeamName(nameTeam: string, correctTeams: string[]) {
   try {
-    const teams = await getBrasileiraoTeamsNames()
-
-    if (!teams) throw new Error('Nenhuma equipe encontrada')
-
     let formattedNameTeam
     if (
       ['galo', 'atlético/mg'].some(
@@ -89,7 +87,7 @@ async function formatTeamName(nameTeam: string) {
     )
       formattedNameTeam = 'Atlético-GO'.toUpperCase()
     else
-      formattedNameTeam = teams.find((team) =>
+      formattedNameTeam = correctTeams.find((team) =>
         nameTeam
           .split(' ')
           .every((nameTeam) =>
