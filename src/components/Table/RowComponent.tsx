@@ -14,8 +14,11 @@ import TableRow from '@mui/material/TableRow'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
-import { IBetUserClassification } from '../../interfaces'
-import { generateRowOfTableBrazuerao } from '../../services/brazuerao.service'
+import { IBetUserClassification } from '@/interfaces'
+import {
+  generateRowOfTableBrazuerao,
+  getDisplayName,
+} from '@/services/brazuerao.service'
 
 const StyledTableCell: any = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -92,7 +95,7 @@ export function RowComponent({
           scope="row"
           sx={{ width: '40vw' }}
         >
-          {row.name}
+          {getDisplayName(row.name)}
         </StyledTableCell>
         <StyledTableCell align="center" sx={{ width: '10vw' }}>
           {row.score}

@@ -38,13 +38,16 @@ async function readBrazueraoSheet(year: number) {
     }
 
     const teams = await getBrasileiraoTeamsNames()
-    if (!teams || teams.length === 0) throw new Error('Brazilian league teams not found')
+    if (!teams || teams.length === 0)
+      throw new Error('Brazilian league teams not found')
 
     betBrazueraoInfoUsers = await Promise.all(
       betBrazueraoInfoUsers.map(async (betBrazueraoInfoUser) => {
         const { teamsClassification } = betBrazueraoInfoUser
-        betBrazueraoInfoUser.teamsClassification =
-          await formatTeamsNames(teamsClassification, teams)
+        betBrazueraoInfoUser.teamsClassification = await formatTeamsNames(
+          teamsClassification,
+          teams
+        )
         return betBrazueraoInfoUser
       })
     )
@@ -60,9 +63,14 @@ async function readBrazueraoSheet(year: number) {
   }
 }
 
-async function formatTeamsNames(teamsNames: string[], correctTeams: string[]): Promise<string[]> {
+async function formatTeamsNames(
+  teamsNames: string[],
+  correctTeams: string[]
+): Promise<string[]> {
   return await Promise.all(
-    teamsNames.map(async (teamName) => await formatTeamName(teamName, correctTeams))
+    teamsNames.map(
+      async (teamName) => await formatTeamName(teamName, correctTeams)
+    )
   )
 }
 

@@ -8,7 +8,7 @@ import {
 } from '../interfaces'
 import { getBrasileiraoTable } from '../repositories/brasileirao.repository'
 import { readBrazueraoSheet } from '../repositories/google.repository'
-import { groupBy } from '@/utils/helpers'
+import { groupBy, titleCaseWord } from '@/utils/helpers'
 
 const firstPositionCorrectScore = 3
 const positionCorrectScore = 2
@@ -378,6 +378,16 @@ function getUrlPhotoUrl(username: string) {
   }
 }
 
+function getDisplayName(username: string) {
+  username = username.toLowerCase()
+  switch (username) {
+    case 'diego':
+      return 'LP da Shopee'
+    default:
+      return titleCaseWord(username)
+  }
+}
+
 async function getBrazilianTable() {
   const brazilianLeague: ITeamPositionInfo[] = await getBrasileiraoTable()
 
@@ -403,6 +413,7 @@ export {
   generateTableRowsBrazuerao,
   generateRowOfTableBrazuerao,
   getUrlPhotoUrl,
+  getDisplayName,
   getBrazilianTable,
   getBrazueraoTableByUser,
   getTeamsInCorrectZones,

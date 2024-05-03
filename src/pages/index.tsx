@@ -5,6 +5,7 @@ import { LocalStorageKeysCache } from '@/configs'
 import { IBetUserClassification } from '@/interfaces'
 import {
   calculateUsersBetScores,
+  getDisplayName,
   getUrlPhotoUrl,
 } from '@/services/brazuerao.service'
 import localStorageService from '@/services/localStorage.service'
@@ -120,7 +121,13 @@ export default function Home() {
     return lastUserScores
   }
 
-  if (errorMessage) return <ErrorComponent errorMessage={errorMessage} />
+  const onResetError = () => {
+    setErrorMessage('')
+    window.location.reload
+  }
+
+  if (errorMessage)
+    return <ErrorComponent errorMessage={errorMessage} onReset={onResetError} />
 
   return (
     <>
@@ -205,7 +212,9 @@ export default function Home() {
                           }}
                           variant="rounded"
                         />
-                        <b>{userScore.username.toUpperCase()}</b>
+                        <b>
+                          {getDisplayName(userScore.username).toUpperCase()}
+                        </b>
                       </Box>
                     )
                   })}

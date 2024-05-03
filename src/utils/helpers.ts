@@ -33,4 +33,9 @@ function groupBy<T>(arr: T[], fn: (item: T) => any) {
   }, {})
 }
 
-export { encryptStringValue, decryptStringValue, groupBy }
+function titleCaseWord(word: string) {
+  if (!word) return word
+  return word[0].toUpperCase() + word.substr(1).toLowerCase()
+}
+
+export { encryptStringValue, decryptStringValue, groupBy, titleCaseWord }

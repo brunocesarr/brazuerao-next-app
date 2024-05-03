@@ -1,16 +1,15 @@
 import { Box, Button, Container, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import React from 'react'
 
-export function ErrorComponent({ errorMessage }: { errorMessage: string }) {
-  const router = useRouter()
-
-  function refreshPage() {
-    router.push('/')
-  }
-
+export function ErrorComponent({
+  errorMessage,
+  onReset,
+}: {
+  errorMessage: string
+  onReset: () => void
+}) {
   return (
     <Box
       sx={{
@@ -49,7 +48,7 @@ export function ErrorComponent({ errorMessage }: { errorMessage: string }) {
               color="warning"
               variant="contained"
               sx={{ mt: 5 }}
-              onClick={refreshPage}
+              onClick={onReset}
             >
               Back Home
             </Button>
