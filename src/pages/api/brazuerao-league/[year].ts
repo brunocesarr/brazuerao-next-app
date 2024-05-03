@@ -27,7 +27,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 
     const { data } = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.BRAZUERAO_SHEET_ID,
-      range: `${spreadsheetTabName}!B1:F21`,
+      range: `${spreadsheetTabName}!B1:G21`,
     })
 
     if (data == null || data.values == null || data.values?.length <= 0)

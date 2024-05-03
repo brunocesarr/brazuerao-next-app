@@ -371,6 +371,8 @@ function getUrlPhotoUrl(username: string) {
       return UserUrlPhotos.LUCAS_PHOTO_URL
     case 'dedé':
       return UserUrlPhotos.DEDE_PHOTO_URL
+    case 'diego':
+      return UserUrlPhotos.DIEGO_PHOTO_URL
     default:
       return ''
   }

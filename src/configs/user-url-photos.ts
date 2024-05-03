@@ -4,4 +4,5 @@ export class UserUrlPhotos {
   static readonly BRUNO_PHOTO_URL: string = `/users-photos/bruno.jpg`
   static readonly LUCAS_PHOTO_URL: string = `/users-photos/lucas.jpg`
   static readonly DEDE_PHOTO_URL: string = `/users-photos/adelson.jpg`
+  static readonly DIEGO_PHOTO_URL: string = `/users-photos/diego.jpeg`
 }
