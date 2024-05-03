@@ -169,7 +169,13 @@ export default function BetStatusDetail({ username }: IBetStatusDetail) {
     )
   }
 
-  if (errorMessage) return <ErrorComponent errorMessage={errorMessage} />
+  const onResetError = () => {
+    setErrorMessage('')
+    window.location.reload
+  }
+
+  if (errorMessage)
+    return <ErrorComponent errorMessage={errorMessage} onReset={onResetError} />
 
   if (
     !isLoading &&
