@@ -131,7 +131,8 @@ async function calculateUsersBetScores(
 ) {
   const leagueTable: ITeamPositionInfo[] = await getBrasileiraoTable()
 
-  const betsLeagueTable: IBetBrazueraoInfoUser[] = await readBrazueraoSheet(year)
+  const betsLeagueTable: IBetBrazueraoInfoUser[] =
+    await readBrazueraoSheet(year)
 
   let userScores: IBetUserClassification[] = []
 
@@ -381,8 +382,12 @@ async function getBrazilianTable() {
   return brazilianLeague ?? []
 }
 
-async function getBrazueraoTableByUser(username: string, year: number = currentFullYear) {
-  const betsLeagueTable: IBetBrazueraoInfoUser[] = await readBrazueraoSheet(year)
+async function getBrazueraoTableByUser(
+  username: string,
+  year: number = currentFullYear
+) {
+  const betsLeagueTable: IBetBrazueraoInfoUser[] =
+    await readBrazueraoSheet(year)
 
   const brazueraoTable = betsLeagueTable.find((betLeagueTable) => {
     return betLeagueTable.name.toUpperCase().includes(username.toUpperCase())

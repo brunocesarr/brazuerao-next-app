@@ -1,7 +1,7 @@
 import { google } from 'googleapis'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-const SPREADSHEET_TAB_NAME: string = "Classificação"
+const SPREADSHEET_TAB_NAME: string = 'Classificação'
 
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   try {
@@ -43,8 +43,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 }
 
 function getSpreadSheetTab(year: String) {
-    let yearFormatted = Number(year)
-    return yearFormatted <= 2023 ? SPREADSHEET_TAB_NAME : `${SPREADSHEET_TAB_NAME} ${yearFormatted}`
+  let yearFormatted = Number(year)
+  return yearFormatted <= 2023
+    ? SPREADSHEET_TAB_NAME
+    : `${SPREADSHEET_TAB_NAME} ${yearFormatted}`
 }
 
 export default handler

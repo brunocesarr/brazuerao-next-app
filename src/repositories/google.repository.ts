@@ -40,9 +40,8 @@ async function readBrazueraoSheet(year: number) {
     betBrazueraoInfoUsers = await Promise.all(
       betBrazueraoInfoUsers.map(async (betBrazueraoInfoUser) => {
         const { teamsClassification } = betBrazueraoInfoUser
-        betBrazueraoInfoUser.teamsClassification = await formatTeamsNames(
-          teamsClassification
-        )
+        betBrazueraoInfoUser.teamsClassification =
+          await formatTeamsNames(teamsClassification)
         return betBrazueraoInfoUser
       })
     )
@@ -71,11 +70,23 @@ async function formatTeamName(nameTeam: string) {
     if (!teams) throw new Error('Nenhuma equipe encontrada')
 
     let formattedNameTeam
-    if (['galo', 'atlético/mg'].some(alternativeName => alternativeName === nameTeam.toLowerCase()))
+    if (
+      ['galo', 'atlético/mg'].some(
+        (alternativeName) => alternativeName === nameTeam.toLowerCase()
+      )
+    )
       formattedNameTeam = 'Atlético-MG'.toUpperCase()
-    else if (['fatal model vitória #tadala'].some(alternativeName => alternativeName === nameTeam.toLowerCase()))
+    else if (
+      ['fatal model vitória #tadala'].some(
+        (alternativeName) => alternativeName === nameTeam.toLowerCase()
+      )
+    )
       formattedNameTeam = 'Vitória'.toUpperCase()
-    else if (['atlético/go'].some(alternativeName => alternativeName === nameTeam.toLowerCase()))
+    else if (
+      ['atlético/go'].some(
+        (alternativeName) => alternativeName === nameTeam.toLowerCase()
+      )
+    )
       formattedNameTeam = 'Atlético-GO'.toUpperCase()
     else
       formattedNameTeam = teams.find((team) =>

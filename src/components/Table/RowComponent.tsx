@@ -67,8 +67,8 @@ export function RowComponent({
   const backgroundColorRow = isFirst
     ? 'rgba(19, 207, 0, 0.65)'
     : isLast
-    ? 'rgba(216, 25, 32, 0.65)'
-    : 'white'
+      ? 'rgba(216, 25, 32, 0.65)'
+      : 'white'
   const colorRow = isFirst || isLast ? 'white' : 'black'
   const borderStyle = isFirst || isLast ? '1px solid #999' : 'none'
 

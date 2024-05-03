@@ -94,16 +94,16 @@ export default function BetStatusDetail({ username }: IBetStatusDetail) {
       .includes('planilha')
       ? 'rgb(255, 255, 143, 0.65)'
       : ZonesClassificationTable.PRE_LIBERTADORES_ZONE.includes(positionTeam)
-      ? 'rgb(137, 207, 240, 0.65)'
-      : ZonesClassificationTable.SULAMERICANA_ZONE.includes(positionTeam)
-      ? 'rgb(255, 255, 143, 0.65)'
-      : 'rgb(240, 255, 255, 0.65)'
+        ? 'rgb(137, 207, 240, 0.65)'
+        : ZonesClassificationTable.SULAMERICANA_ZONE.includes(positionTeam)
+          ? 'rgb(255, 255, 143, 0.65)'
+          : 'rgb(240, 255, 255, 0.65)'
 
     return ZonesClassificationTable.G4_ZONE.includes(positionTeam)
       ? 'rgba(19, 207, 0, 0.65)'
       : ZonesClassificationTable.RELEGATION_ZONE.includes(positionTeam)
-      ? 'rgba(216, 25, 32, 0.65)'
-      : backgroundColorIfZonaCentral
+        ? 'rgba(216, 25, 32, 0.65)'
+        : backgroundColorIfZonaCentral
   }
 
   const colorRow = (positionTeam: number) => {
