@@ -185,6 +185,7 @@ export default function Home() {
                   {getLastUserScores().map((userScore) => {
                     return (
                       <Box
+                        key={userScore.username}
                         sx={{
                           display: 'flex',
                           justifyContent: 'center',

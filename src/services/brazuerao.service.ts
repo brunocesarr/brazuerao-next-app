@@ -14,6 +14,8 @@ const firstPositionCorrectScore = 3
 const positionCorrectScore = 2
 const ZoneCorrectScore = 1
 
+const currentFullYear = new Date().getFullYear()
+
 function getTeamsInCorrectPositions(
   leagueTable: ITeamPositionInfo[],
   teamsOrderBet: string[]
@@ -124,11 +126,12 @@ function getTeamsInCorrectZonesWithPositionInfo(
 }
 
 async function calculateUsersBetScores(
-  useOriginalZonesInTable: boolean = false
+  useOriginalZonesInTable: boolean = false,
+  year: number = currentFullYear
 ) {
   const leagueTable: ITeamPositionInfo[] = await getBrasileiraoTable()
 
-  const betsLeagueTable: IBetBrazueraoInfoUser[] = await readBrazueraoSheet()
+  const betsLeagueTable: IBetBrazueraoInfoUser[] = await readBrazueraoSheet(year)
 
   let userScores: IBetUserClassification[] = []
 
@@ -378,8 +381,8 @@ async function getBrazilianTable() {
   return brazilianLeague ?? []
 }
 
-async function getBrazueraoTableByUser(username: string) {
-  const betsLeagueTable: IBetBrazueraoInfoUser[] = await readBrazueraoSheet()
+async function getBrazueraoTableByUser(username: string, year: number = currentFullYear) {
+  const betsLeagueTable: IBetBrazueraoInfoUser[] = await readBrazueraoSheet(year)
 
   const brazueraoTable = betsLeagueTable.find((betLeagueTable) => {
     return betLeagueTable.name.toUpperCase().includes(username.toUpperCase())

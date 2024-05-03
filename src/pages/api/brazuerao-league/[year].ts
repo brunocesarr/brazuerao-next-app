@@ -1,10 +1,15 @@
 import { google } from 'googleapis'
 import { NextApiRequest, NextApiResponse } from 'next'
 
+const SPREADSHEET_TAB_NAME: string = "Classificação"
+
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   try {
     if (req.method !== 'GET')
       res.status(405).json({ message: 'Method Not Allowed' })
+
+    const { year } = req.query
+    const spreadsheetTabName = getSpreadSheetTab(String(year))
 
     const auth = new google.auth.GoogleAuth({
       credentials: {
@@ -22,7 +27,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 
     const { data } = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.BRAZUERAO_SHEET_ID,
-      range: 'Classificação!B1:F21',
+      range: `${spreadsheetTabName}!B1:F21`,
     })
 
     if (data == null || data.values == null || data.values?.length <= 0)
@@ -35,6 +40,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
       .status(500)
       .json({ message: 'Internal Error', Error: (error as Error).message })
   }
+}
+
+function getSpreadSheetTab(year: String) {
+    let yearFormatted = Number(year)
+    return yearFormatted <= 2023 ? SPREADSHEET_TAB_NAME : `${SPREADSHEET_TAB_NAME} ${yearFormatted}`
 }
 
 export default handler

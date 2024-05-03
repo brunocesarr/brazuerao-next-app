@@ -52,26 +52,11 @@ async function getBrasileiraoTable(): Promise<ITeamPositionInfo[]> {
 
 async function getBrasilianLeague() {
   let brasilianLeagueTableApiInfo: ITeamPositionApiInfo[] = []
-  let errorMessage = ''
-
   try {
-    brasilianLeagueTableApiInfo = await getBrasilianLeagueGE()
-  } catch (error) {
-    errorMessage = `${(error as Error).message}`
-  }
-
-  if (brasilianLeagueTableApiInfo && brasilianLeagueTableApiInfo.length > 0)
-    return brasilianLeagueTableApiInfo
-
-  try {
-    brasilianLeagueTableApiInfo = await getBrasilianLeagueApiFutebol()
+    let brasilianLeagueTableApiInfo = await getBrasilianLeagueGE()
     return brasilianLeagueTableApiInfo
   } catch (error) {
-    console.error(
-      `Error in API Futebol. Erro message: ${(error as Error).message}`
-    )
-    errorMessage = `${errorMessage}. ${(error as Error).message}`
-    throw new Error(errorMessage)
+    throw new Error(`${(error as Error).message}`)
   }
 }
 

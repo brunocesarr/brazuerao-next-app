@@ -6,7 +6,7 @@ import { sheets_v4 } from 'googleapis'
 import apiGoogleSheet from './base/apiGoogleSheet'
 import { getBrasileiraoTeamsNames } from './brasileirao.repository'
 
-async function readBrazueraoSheet() {
+async function readBrazueraoSheet(year: number) {
   try {
     let betBrazueraoInfoUsers: IBetBrazueraoInfoUser[] =
       localStorageService.getItem(
@@ -18,7 +18,7 @@ async function readBrazueraoSheet() {
 
     const { data: brazueraoSheet } =
       await apiGoogleSheet.get<sheets_v4.Schema$ValueRange>(
-        '/api/brazuerao-league'
+        `/api/brazuerao-league/${year}`
       )
 
     if (!brazueraoSheet) throw 'Planilha não encontrada!'
@@ -71,8 +71,12 @@ async function formatTeamName(nameTeam: string) {
     if (!teams) throw new Error('Nenhuma equipe encontrada')
 
     let formattedNameTeam
-    if (nameTeam.toLocaleLowerCase().includes('galo'))
+    if (['galo', 'atlético/mg'].some(alternativeName => alternativeName === nameTeam.toLowerCase()))
       formattedNameTeam = 'Atlético-MG'.toUpperCase()
+    else if (['fatal model vitória #tadala'].some(alternativeName => alternativeName === nameTeam.toLowerCase()))
+      formattedNameTeam = 'Vitória'.toUpperCase()
+    else if (['atlético/go'].some(alternativeName => alternativeName === nameTeam.toLowerCase()))
+      formattedNameTeam = 'Atlético-GO'.toUpperCase()
     else
       formattedNameTeam = teams.find((team) =>
         nameTeam
