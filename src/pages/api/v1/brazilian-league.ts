@@ -29,7 +29,7 @@ apiBrasileiraoGloboEsporte.interceptors.request.use(
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   try {
     if (req.method !== 'GET')
-      res.status(405).json({ message: 'Method Not Allowed' })
+      return res.status(405).json({ message: 'Method Not Allowed' })
 
     const { data } = await apiBrasileiraoGloboEsporte.get(
       '/futebol/brasileirao-serie-a',

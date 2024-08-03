@@ -24,6 +24,11 @@ function decryptStringValue(value: string): string {
   return decryptedValue
 }
 
+function getCurrentYear(): number {
+  const currentDate = new Date()
+  return currentDate.getFullYear()
+}
+
 function groupBy<T>(arr: T[], fn: (item: T) => any) {
   return arr.reduce<Record<string, T[]>>((prev, curr) => {
     const groupKey = fn(curr)
@@ -38,4 +43,10 @@ function titleCaseWord(word: string) {
   return word[0].toUpperCase() + word.substr(1).toLowerCase()
 }
 
-export { encryptStringValue, decryptStringValue, groupBy, titleCaseWord }
+export {
+  encryptStringValue,
+  decryptStringValue,
+  groupBy,
+  titleCaseWord,
+  getCurrentYear,
+}

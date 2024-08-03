@@ -1,3 +1,4 @@
+import { getCurrentYear } from '@/utils/helpers'
 import { google } from 'googleapis'
 import { NextApiRequest, NextApiResponse } from 'next'
 
@@ -6,9 +7,13 @@ const SPREADSHEET_TAB_NAME: string = 'Classificação'
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   try {
     if (req.method !== 'GET')
-      res.status(405).json({ message: 'Method Not Allowed' })
+      return res.status(405).json({ message: 'Method Not Allowed' })
 
     const { year } = req.query
+
+    if (Number(year) > getCurrentYear())
+      return res.status(400).json({ message: 'Invalid parameter: year' })
+
     const spreadsheetTabName = getSpreadSheetTab(String(year))
 
     const auth = new google.auth.GoogleAuth({

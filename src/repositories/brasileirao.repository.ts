@@ -51,7 +51,6 @@ async function getBrasileiraoTable(): Promise<ITeamPositionInfo[]> {
 }
 
 async function getBrasilianLeague() {
-  let brasilianLeagueTableApiInfo: ITeamPositionApiInfo[] = []
   try {
     let brasilianLeagueTableApiInfo = await getBrasilianLeagueGE()
     return brasilianLeagueTableApiInfo
@@ -64,7 +63,7 @@ async function getBrasilianLeagueGE() {
   try {
     const { data: brasilianLeagueApiGE } = await apiBrasileiraoGloboEsporte.get<
       any[]
-    >('/api/brazilian-league')
+    >('/api/v1/brazilian-league')
 
     return brasilianLeagueApiGE.map((teamPositionInfo) => {
       const teamPositionApiInfo: ITeamPositionApiInfo = {

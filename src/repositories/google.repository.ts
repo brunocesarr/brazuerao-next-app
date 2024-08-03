@@ -18,7 +18,7 @@ async function readBrazueraoSheet(year: number) {
 
     const { data: brazueraoSheet } =
       await apiGoogleSheet.get<sheets_v4.Schema$ValueRange>(
-        `/api/brazuerao-league/${year}`
+        `/api/v1/brazuerao-league/${year}`
       )
 
     if (!brazueraoSheet) throw 'Sheet no found!'
