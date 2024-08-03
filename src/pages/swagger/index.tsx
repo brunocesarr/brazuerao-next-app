@@ -1,12 +1,15 @@
 import { getApiDocs } from '@/lib/swagger'
-import ReactSwagger from '@/components/Swagger/react-swagger'
+import 'swagger-ui-react/swagger-ui.css'
 
-function ApiDoc() {
-  return (
-    <section className="container">
-      <ReactSwagger spec={getApiDocs()} />
-    </section>
-  )
-}
+import dynamic from "next/dynamic";
 
-export default ApiDoc
+const DynamicSwaggerUI = dynamic(() => import("swagger-ui-react"), {
+  ssr: false,
+  loading: () => <p>Loading Swagger...</p>,
+});
+
+const ApiDoc = () => {
+  return <DynamicSwaggerUI spec={getApiDocs()} />
+};
+
+export default ApiDoc;
