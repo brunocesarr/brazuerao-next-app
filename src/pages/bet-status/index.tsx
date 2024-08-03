@@ -86,7 +86,7 @@ export default function BetStatusDetail({ username }: IBetStatusDetail) {
     getTablesInfo()
       .catch((error) => setErrorMessage((error as Error).message))
       .finally(() => setIsLoading(false))
-  }, [])
+  }, [username])
 
   const backgroundColorRow = (positionTeam: number) => {
     const backgroundColorIfZonaCentral = zonesInTable
