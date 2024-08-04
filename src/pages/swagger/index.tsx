@@ -11,7 +11,15 @@ const DynamicSwaggerUI = dynamic(() => import('swagger-ui-react'), {
 })
 
 const ApiDoc = () => {
-  return <DynamicSwaggerUI spec={getApiDocs()} />
+  return (
+    <DynamicSwaggerUI
+      spec={getApiDocs()}
+      displayRequestDuration
+      displayOperationId
+      docExpansion="list"
+      tryItOutEnabled
+    />
+  )
 }
 
 export default ApiDoc

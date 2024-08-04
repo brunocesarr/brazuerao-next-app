@@ -1,12 +1,7 @@
 import { initContract } from '@ts-rest/core'
-import { unknown, z } from 'zod'
+import { z } from 'zod'
 import { extendZodWithOpenApi } from '@anatine/zod-openapi'
-import {
-  IBetBrazueraoInfoUser,
-  IBetUserClassificationSchema,
-  teamSchema,
-} from '@/interfaces'
-import { getCurrentYear } from '@/utils/helpers'
+import { teamSchema } from '@/interfaces'
 
 extendZodWithOpenApi(z)
 
@@ -20,7 +15,6 @@ const brazilianLegueTable = c.router({
     responses: {
       200: z.array(teamSchema),
       204: c.noBody(),
-      500: z.object({ message: z.literal('Internal Error') }),
     },
     metadata: { tags: 'brazilian-league' } as const,
   },
@@ -72,7 +66,6 @@ const brazueraoLegueTable = c.router({
           },
         ],
       }),
-      500: z.object({ message: z.literal('Internal Error') }),
     },
   },
 })
@@ -85,9 +78,21 @@ export const apiContract = c.router(
   {
     pathPrefix: '/api/v1',
     commonResponses: {
-      404: c.type<{ message: 'Not Found'; reason: string }>(),
+      404: z.object({ message: z.string(), reason: z.string() }).openapi({
+        title: 'Bad Request',
+        description: 'Bad Request schema',
+        examples: [
+          {
+            value: {
+              message: 'Not Found',
+              reason: 'unknown',
+            },
+            summary: 'Example of a not found error',
+          },
+        ],
+      }),
       500: c.otherResponse({
-        contentType: 'text/plain',
+        contentType: 'application/json',
         body: z.literal('Server Error'),
       }),
     },
