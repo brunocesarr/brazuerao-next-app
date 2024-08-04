@@ -1,8 +1,9 @@
-import ErrorBoundary from '@/components/Error/error-boundary'
+import { fallbackRender } from '@/components/Error/fallback-render'
 import '@/styles/globals.css'
 
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import { ErrorBoundary } from 'react-error-boundary'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -13,7 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo.ico" />
       </Head>
-      <ErrorBoundary>
+      <ErrorBoundary fallbackRender={fallbackRender}>
         <Component {...pageProps} />
       </ErrorBoundary>
     </>
