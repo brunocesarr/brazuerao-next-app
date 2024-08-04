@@ -1,3 +1,5 @@
+'use client';
+
 import { getApiDocs } from '@/lib/swagger'
 import 'swagger-ui-react/swagger-ui.css'
 
