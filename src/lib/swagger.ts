@@ -1,6 +1,5 @@
 import { generateOpenApi } from '@ts-rest/open-api'
 import { apiContract } from './open-api-contract'
-import { z } from 'zod'
 import {
   brazueraoSpreadSheetOpenApiSchema,
   teamOpenApiSchema,
@@ -27,8 +26,8 @@ export const getApiDocs = () => {
       },
       components: {
         schemas: {
-          teamOpenApiSchema,
-          brazueraoSpreadSheetOpenApiSchema,
+          Team: teamOpenApiSchema,
+          BrazueraoSpreadSheet: brazueraoSpreadSheetOpenApiSchema,
         },
       },
       basePath: '/api',

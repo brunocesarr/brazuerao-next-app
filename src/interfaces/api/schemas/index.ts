@@ -1,8 +1,16 @@
 export const brazueraoSpreadSheetOpenApiSchema = {
   type: 'object',
   properties: {
-    range: { type: 'string', example: "'Table'!B1:G21" },
-    majorDimension: { type: 'string', example: 'ROWS' },
+    range: {
+      type: 'string',
+      description: 'Range of spreadsheet',
+      example: "'Table'!B1:G21",
+    },
+    majorDimension: {
+      type: 'string',
+      description: 'Dimension',
+      example: 'ROWS',
+    },
     values: {
       type: 'array',
       items: { type: 'string' },
