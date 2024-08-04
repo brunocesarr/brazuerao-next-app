@@ -57,20 +57,20 @@ const brazueraoLegueTable = c.router({
       400: z.object({ message: z.string() }).openapi({
         title: 'Bad Request',
         description: 'Bad Request schema',
-        mediaExamples: {
-          unknownError: {
+        examples: [
+          {
             value: {
               message: 'unknown error',
             },
             summary: 'Example of a unknown error',
           },
-          invalidParameter: {
+          {
             value: {
               message: 'Invalid parameter: year',
             },
             summary: 'Example of a invalid parameter',
           },
-        },
+        ],
       }),
       500: z.object({ message: z.literal('Internal Error') }),
     },
