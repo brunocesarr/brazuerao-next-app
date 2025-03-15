@@ -32,7 +32,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 
     const { data } = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.BRAZUERAO_SHEET_ID,
-      range: `${spreadsheetTabName}!B1:G21`,
+      range: `${spreadsheetTabName}!B1:K21`,
     })
 
     if (data == null || data.values == null || data.values?.length <= 0)
@@ -51,7 +51,7 @@ function getSpreadSheetTab(year: String) {
   let yearFormatted = Number(year)
   return yearFormatted <= 2023
     ? SPREADSHEET_TAB_NAME
-    : `${SPREADSHEET_TAB_NAME} ${yearFormatted}`
+    : `${SPREADSHEET_TAB_NAME} ${2024}`
 }
 
 export default handler

@@ -97,10 +97,10 @@ function getTeamsInCorrectPositionsWithPositionInfo(
   teamsOrderBet: string[]
 ) {
   return getTeamsInCorrectPositions(leagueTable, teamsOrderBet).map((item) => {
-    const currentPosition = leagueTable.findIndex(
+    const currentPosition = leagueTable.find(
       (teamPosition) => teamPosition.nomePopular === item
     )
-    return `${item} (${currentPosition + 1}º)`
+    return `${item} (${currentPosition?.posicao}º)`
   })
 }
 
@@ -373,6 +373,14 @@ function getUrlPhotoUrl(username: string) {
       return UserUrlPhotos.DEDE_PHOTO_URL
     case 'diego':
       return UserUrlPhotos.DIEGO_PHOTO_URL
+    case 'amanda':
+      return UserUrlPhotos.AMANDA_PHOTO_URL
+    case 'eduarda':
+      return UserUrlPhotos.EDUARDA_PHOTO_URL
+    case 'ellen':
+      return UserUrlPhotos.ELLEN_PHOTO_URL
+    case 'kamilla':
+      return UserUrlPhotos.KAMILLA_PHOTO_URL
     default:
       return ''
   }
