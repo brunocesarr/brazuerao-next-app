@@ -2,7 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['e1.pxfuel.com', 'img.freepik.com'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'e1.pxfuel.com' },
+      { protocol: 'https', hostname: 'img.freepik.com' },
+    ],
   },
 }
 

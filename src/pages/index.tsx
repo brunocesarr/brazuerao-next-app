@@ -143,7 +143,7 @@ export default function Home() {
             }}
           >
             <Image
-              src="https://e1.pxfuel.com/desktop-wallpaper/441/284/desktop-wallpaper-confirmado-presidente-da-cbf-anuncia-datas-do-brasileirao-e-copa-do-brasil-canal-flu-news-campeonato-brasileiro-serie-a.jpg"
+              src="/brasileirao-serie-a-logo.jpg"
               className="logo"
               alt="Brasileirão logo"
               width={480}
