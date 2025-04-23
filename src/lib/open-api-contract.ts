@@ -48,19 +48,21 @@ const brazueraoLegueTable = c.router({
           }),
       }),
       204: c.noBody(),
-      400: z.object({ message: z.string() }).openapi({
+      400: z.object({ message: z.string(), reason: z.string() }).openapi({
         title: 'Bad Request',
         description: 'Bad Request schema',
         examples: [
           {
             value: {
               message: 'unknown error',
+              reason: 'unknown',
             },
             summary: 'Example of a unknown error',
           },
           {
             value: {
               message: 'Invalid parameter: year',
+              reason: 'invalid_parameter',
             },
             summary: 'Example of a invalid parameter',
           },

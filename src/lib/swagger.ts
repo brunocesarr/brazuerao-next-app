@@ -6,7 +6,7 @@ import {
 } from '@/interfaces/api/schemas'
 
 export const getApiDocs = () => {
-  let apiDoc = generateOpenApi(
+  const apiDoc = generateOpenApi(
     apiContract,
     {
       swagger: '3.1.0',
