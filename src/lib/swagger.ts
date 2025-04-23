@@ -1,9 +1,12 @@
 import { generateOpenApi } from '@ts-rest/open-api'
 import { apiContract } from './open-api-contract'
-import { teamOpenApiSchema } from '@/interfaces/api/schemas'
+import {
+  brazueraoSpreadSheetOpenApiSchema,
+  teamOpenApiSchema,
+} from '@/interfaces/api/schemas'
 
 export const getApiDocs = () => {
-  return generateOpenApi(
+  const apiDoc = generateOpenApi(
     apiContract,
     {
       swagger: '3.1.0',
@@ -19,6 +22,12 @@ export const getApiDocs = () => {
         license: {
           name: 'Apache 2.0',
           url: 'http://www.apache.org/licenses/LICENSE-2.0.html',
+        },
+      },
+      components: {
+        schemas: {
+          Team: teamOpenApiSchema,
+          BrazueraoSpreadSheet: brazueraoSpreadSheetOpenApiSchema,
         },
       },
       basePath: '/api',
@@ -39,4 +48,6 @@ export const getApiDocs = () => {
       jsonQuery: true,
     }
   )
+
+  return apiDoc
 }

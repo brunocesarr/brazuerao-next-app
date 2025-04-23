@@ -1,3 +1,25 @@
+export const brazueraoSpreadSheetOpenApiSchema = {
+  type: 'object',
+  properties: {
+    range: {
+      type: 'string',
+      description: 'Range of spreadsheet',
+      example: "'Table'!B1:G21",
+    },
+    majorDimension: {
+      type: 'string',
+      description: 'Dimension',
+      example: 'ROWS',
+    },
+    values: {
+      type: 'array',
+      items: { type: 'string' },
+      example: ['Cell One', 'Cell Two'],
+    },
+  },
+  required: ['range'],
+}
+
 export const teamOpenApiSchema = {
   type: 'object',
   properties: {

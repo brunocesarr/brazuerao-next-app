@@ -148,6 +148,7 @@ export default function Home() {
               alt="Brasileirão logo"
               width={480}
               height={270}
+              priority
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADA..."
               sizes="(min-width: 60em) 24vw,
                       (min-width: 28em) 45vw,
