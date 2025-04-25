@@ -7,6 +7,32 @@ extendZodWithOpenApi(z)
 
 const c = initContract()
 
+const errorSchema = z
+  .object({
+    message: z.string(),
+    reason: z.string(),
+  })
+  .openapi({
+    title: 'Bad Request',
+    description: 'Bad Request schema',
+    examples: [
+      {
+        value: {
+          message: 'unknown error',
+          reason: 'unknown',
+        },
+        summary: 'Example of a unknown error',
+      },
+      {
+        value: {
+          message: 'Invalid parameter: year',
+          reason: 'invalid_parameter',
+        },
+        summary: 'Example of a invalid parameter',
+      },
+    ],
+  })
+
 const brazilianLegueTable = c.router({
   getBrazilianLeagueTable: {
     method: 'GET',
@@ -48,26 +74,7 @@ const brazueraoLegueTable = c.router({
           }),
       }),
       204: c.noBody(),
-      400: z.object({ message: z.string(), reason: z.string() }).openapi({
-        title: 'Bad Request',
-        description: 'Bad Request schema',
-        examples: [
-          {
-            value: {
-              message: 'unknown error',
-              reason: 'unknown',
-            },
-            summary: 'Example of a unknown error',
-          },
-          {
-            value: {
-              message: 'Invalid parameter: year',
-              reason: 'invalid_parameter',
-            },
-            summary: 'Example of a invalid parameter',
-          },
-        ],
-      }),
+      400: errorSchema,
     },
   },
 })
@@ -80,19 +87,7 @@ export const apiContract = c.router(
   {
     pathPrefix: '/api/v1',
     commonResponses: {
-      404: z.object({ message: z.string(), reason: z.string() }).openapi({
-        title: 'Bad Request',
-        description: 'Bad Request schema',
-        examples: [
-          {
-            value: {
-              message: 'Not Found',
-              reason: 'unknown',
-            },
-            summary: 'Example of a not found error',
-          },
-        ],
-      }),
+      404: errorSchema,
       500: c.otherResponse({
         contentType: 'application/json',
         body: z.literal('Server Error'),

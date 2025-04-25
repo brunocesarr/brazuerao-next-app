@@ -396,6 +396,32 @@ function getDisplayName(username: string) {
   }
 }
 
+function getLastUserScores(usersScore: IBetUserClassification[]) {
+  const menUsers = ['anderson', 'ailton', 'bruno', 'lucas', 'dedé', 'diego']
+  const womenUsers = ['amanda', 'ellen', 'eduarda']
+  const lastPositionMen = usersScore.findLast((userScore) =>
+    menUsers.some((username) => username === userScore.username.toLowerCase())
+  )?.position
+  const lastPositionWomen = usersScore.findLast((userScore) =>
+    womenUsers.some((username) => username === userScore.username.toLowerCase())
+  )?.position
+  const lastUserScores = [
+    ...usersScore.filter(
+      (userScore) =>
+        menUsers.some(
+          (username) => username === userScore.username.toLowerCase()
+        ) && userScore.position === lastPositionMen
+    ),
+    ...usersScore.filter(
+      (userScore) =>
+        womenUsers.some(
+          (username) => username === userScore.username.toLowerCase()
+        ) && userScore.position === lastPositionWomen
+    ),
+  ]
+  return lastUserScores
+}
+
 async function getBrazilianTable() {
   const brazilianLeague: ITeamPositionInfo[] = await getBrasileiraoTable()
 
@@ -422,6 +448,7 @@ export {
   generateRowOfTableBrazuerao,
   getUrlPhotoUrl,
   getDisplayName,
+  getLastUserScores,
   getBrazilianTable,
   getBrazueraoTableByUser,
   getTeamsInCorrectZones,

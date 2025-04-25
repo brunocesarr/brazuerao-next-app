@@ -6,6 +6,7 @@ import { IBetUserClassification } from '@/interfaces'
 import {
   calculateUsersBetScores,
   getDisplayName,
+  getLastUserScores,
   getUrlPhotoUrl,
 } from '@/services/brazuerao.service'
 import localStorageService from '@/services/localStorage.service'
@@ -113,14 +114,6 @@ export default function Home() {
     )
   }
 
-  const getLastUserScores = () => {
-    const lastPosition = usersScore[usersScore.length - 1].position
-    const lastUserScores = usersScore.filter(
-      (userScore) => userScore.position === lastPosition
-    )
-    return lastUserScores
-  }
-
   const onResetError = () => {
     setErrorMessage('')
     window.location.reload
@@ -190,7 +183,7 @@ export default function Home() {
                     mt: 2,
                   }}
                 >
-                  {getLastUserScores().map((userScore) => {
+                  {getLastUserScores(usersScore).map((userScore) => {
                     return (
                       <Box
                         key={userScore.username}
