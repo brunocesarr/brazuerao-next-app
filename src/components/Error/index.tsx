@@ -22,8 +22,7 @@ export function ErrorComponent({
       <Container maxWidth="md">
         <Grid container spacing={2}>
           <Grid
-            item
-            xs={6}
+            size={6}
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -53,7 +52,7 @@ export function ErrorComponent({
               Back Home
             </Button>
           </Grid>
-          <Grid item xs={6}>
+          <Grid size={6}>
             <Image
               src="https://img.freepik.com/free-vector/500-internal-server-error-concept-illustration_114360-1885.jpg?w=2000"
               alt=""
