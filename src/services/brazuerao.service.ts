@@ -398,7 +398,7 @@ function getDisplayName(username: string) {
 
 function getLastUserScores(usersScore: IBetUserClassification[]) {
   const menUsers = ['anderson', 'ailton', 'bruno', 'lucas', 'dedé', 'diego']
-  const womenUsers = ['amanda', 'ellen', 'eduarda']
+  const womenUsers = ['amanda', 'ellen', 'eduarda', 'kamilla']
   const lastPositionMen = usersScore.findLast((userScore) =>
     menUsers.some((username) => username === userScore.username.toLowerCase())
   )?.position
