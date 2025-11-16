@@ -214,7 +214,7 @@ export default function BetStatusDetail({ username }: IBetStatusDetail) {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 2 }}
-              onClick={() => 
+              onClick={() =>
                 router.push({
                   pathname: '/',
                   query: { forceRefresh: true },

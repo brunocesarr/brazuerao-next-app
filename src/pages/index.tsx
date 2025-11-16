@@ -29,8 +29,8 @@ import { useEffect, useState } from 'react'
 const inter = Roboto({ weight: '400', subsets: ['latin'] })
 
 export default function Home() {
-  const router = useRouter();
-  const { forceRefresh } = router.query;
+  const router = useRouter()
+  const { forceRefresh } = router.query
   const [usersScore, setUsersScore] = useState<IBetUserClassification[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -38,9 +38,9 @@ export default function Home() {
 
   useEffect(() => {
     if (forceRefresh === 'true') {
-      generateBrazueraoClassification();
+      generateBrazueraoClassification()
     }
-  }, [forceRefresh]);
+  }, [forceRefresh])
 
   const generateBrazueraoClassification = async (
     modeZonesInTable: string = zonesInTable
