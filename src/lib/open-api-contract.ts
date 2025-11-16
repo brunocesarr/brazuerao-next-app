@@ -1,6 +1,6 @@
 import { initContract } from '@ts-rest/core'
 import { z } from 'zod'
-import { extendZodWithOpenApi } from '@anatine/zod-openapi'
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { teamSchema } from '@/interfaces'
 
 extendZodWithOpenApi(z)
