@@ -173,7 +173,10 @@ function reorderUserByScore(userScores: IBetUserClassification[]) {
       if (b.score > a.score) return 1
       else if (b.score < a.score) return -1
       else {
-        if (
+        if (b.isCurrentChampionCorrect && !a.isCurrentChampionCorrect) return 1
+        else if (!b.isCurrentChampionCorrect && a.isCurrentChampionCorrect)
+          return -1
+        else if (
           b.teamsInCorrectsPositions.length > a.teamsInCorrectsPositions.length
         )
           return 1
