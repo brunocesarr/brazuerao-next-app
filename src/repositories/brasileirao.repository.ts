@@ -18,11 +18,16 @@ async function getBrasileiraoTeamsNames(): Promise<string[] | undefined> {
   }
 }
 
-async function getBrasileiraoTable(): Promise<ITeamPositionInfo[]> {
+async function getBrasileiraoTable(
+  enableCache: boolean = true
+): Promise<ITeamPositionInfo[]> {
   try {
-    let leagueTableData: ITeamPositionInfo[] = localStorageService.getItem(
-      LocalStorageKeysCache.BRASILEIRAO_LEAGUE_SERVICE_GET_TABLE
-    )
+    let leagueTableData: ITeamPositionInfo[] = []
+    if (enableCache) {
+      leagueTableData = localStorageService.getItem(
+        LocalStorageKeysCache.BRASILEIRAO_LEAGUE_SERVICE_GET_TABLE
+      )
+    }
 
     if (leagueTableData && leagueTableData.length > 0) return leagueTableData
 
@@ -41,7 +46,9 @@ async function getBrasileiraoTable(): Promise<ITeamPositionInfo[]> {
       } as ITeamPositionInfo
     })
 
-    localStorageService.setItem('brazileirao-table', leagueTableData)
+    if (enableCache) {
+      localStorageService.setItem('brazileirao-table', leagueTableData)
+    }
 
     return leagueTableData
   } catch (error) {

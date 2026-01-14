@@ -167,6 +167,35 @@ async function calculateUsersBetScores(
   return reorderUserByScore(userScores)
 }
 
+async function calculateIndividualScore(
+  teamsClassification: string[],
+  useOriginalZonesInTable: boolean = false
+) {
+  const leagueTable: ITeamPositionInfo[] = await getBrasileiraoTable(false)
+
+  const currentTeamChampion = leagueTable.at(0)?.nomePopular
+
+  const currentBetTeamChampion = teamsClassification.at(0)
+
+  return {
+    score: calculateScore(
+      leagueTable,
+      teamsClassification,
+      useOriginalZonesInTable
+    ),
+    isCurrentChampionCorrect: currentTeamChampion === currentBetTeamChampion,
+    teamsInCorrectsPositions: getTeamsInCorrectPositionsWithPositionInfo(
+      leagueTable,
+      teamsClassification
+    ),
+    teamsInCorrectZones: getTeamsInCorrectZonesWithPositionInfo(
+      leagueTable,
+      teamsClassification,
+      useOriginalZonesInTable
+    ),
+  }
+}
+
 function reorderUserByScore(userScores: IBetUserClassification[]) {
   userScores = userScores
     .sort((a, b) => {
@@ -447,6 +476,7 @@ async function getBrazueraoTableByUser(
 
 export {
   calculateUsersBetScores,
+  calculateIndividualScore,
   generateTableRowsBrazuerao,
   generateRowOfTableBrazuerao,
   getUrlPhotoUrl,
