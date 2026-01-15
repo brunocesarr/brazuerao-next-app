@@ -1,3 +1,4 @@
+'use client'
 interface TabPanelProps {
   children?: React.ReactNode
   tabName: string

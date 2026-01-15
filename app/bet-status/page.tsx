@@ -1,3 +1,5 @@
+'use client'
+
 import { ErrorComponent } from '@/components/Error'
 import { ZonesClassificationTable } from '@/configs/zones-classification-table'
 import { ITeamPositionInfo } from '@/interfaces'
@@ -30,7 +32,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -49,12 +51,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }))
 
-interface IBetStatusDetail {
-  username: string
-}
+export default function BetStatusDetail() {
+  const getUsername = () => {
+    let username = searchParams.get('user')
+    if (username) {
+      return (
+        (username as string)?.charAt(0).toUpperCase() +
+        (username as string)?.slice(1)
+      )
+    } else {
+      return ''
+    }
+  }
 
-export default function BetStatusDetail({ username }: IBetStatusDetail) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const username = getUsername()
   const [brazueraoTable, setBrazueraoTable] = useState<string[]>([])
   const [brazilianTable, setBrazilianTable] = useState<ITeamPositionInfo[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -214,12 +226,7 @@ export default function BetStatusDetail({ username }: IBetStatusDetail) {
               color="inherit"
               aria-label="menu"
               sx={{ mr: 2 }}
-              onClick={() =>
-                router.push({
-                  pathname: '/',
-                  query: { forceRefresh: true },
-                })
-              }
+              onClick={() => router.back()}
             >
               <ArrowBackOutlinedIcon />
             </IconButton>
@@ -345,7 +352,7 @@ export default function BetStatusDetail({ username }: IBetStatusDetail) {
                   <TableBody>
                     {brazueraoTable.map((row, index) => (
                       <StyledTableRow
-                        key={row}
+                        key={index}
                         sx={{
                           borderTop: borderStyle(index + 1),
                           borderBottom: borderStyle(index + 1),
@@ -425,15 +432,4 @@ export default function BetStatusDetail({ username }: IBetStatusDetail) {
       </Container>
     </>
   )
-}
-
-export async function getServerSideProps(context: any) {
-  const { user } = context.query
-  console.log(`Fetched user: ${user}`)
-  return {
-    props: {
-      username:
-        (user as string)?.charAt(0).toUpperCase() + (user as string)?.slice(1),
-    },
-  }
 }

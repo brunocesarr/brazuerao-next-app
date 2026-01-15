@@ -1,3 +1,5 @@
+'use client'
+
 import { ErrorComponent } from '@/components/Error'
 import { TableComponent } from '@/components/Table'
 import { TabPanel } from '@/components/TabPanel'
@@ -21,7 +23,7 @@ import {
 } from '@mui/material'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
-import { useRouter } from 'next/router'
+import { useSearchParams } from 'next/navigation'
 import { Roboto } from 'next/font/google'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
@@ -29,8 +31,8 @@ import { useEffect, useState } from 'react'
 const inter = Roboto({ weight: '400', subsets: ['latin'] })
 
 export default function Home() {
-  const router = useRouter()
-  const { forceRefresh } = router.query
+  const searchParams = useSearchParams()
+  const forceRefresh = searchParams.get('forceRefresh')
   const [usersScore, setUsersScore] = useState<IBetUserClassification[]>([])
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)

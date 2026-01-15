@@ -1,13 +1,14 @@
 import { IBetBrazueraoInfoUser } from '@/interfaces'
 import { calculateIndividualScore } from '@/services/brazuerao.service'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextRequest, NextResponse } from 'next/server'
 
-async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export async function GET(request: NextRequest) {
+  return NextResponse.json({ message: 'Bet status API is running' })
+}
+
+export async function POST(request: NextRequest) {
   try {
-    if (req.method !== 'POST')
-      return res.status(405).json({ message: 'Method Not Allowed' })
-
-    const { bets }: { bets: IBetBrazueraoInfoUser[] } = await req.body
+    const { bets }: { bets: IBetBrazueraoInfoUser[] } = await request.json()
 
     if (
       !bets ||
@@ -15,17 +16,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
       bets.length <= 0 ||
       !isValidBody(bets)
     ) {
-      return res.status(400).json({ error: 'Invalid body' })
+      return NextResponse.json({ error: 'Invalid body' }, { status: 400 })
     }
 
     const scoreResults = await calculateIndividualScore(bets)
 
-    return res.status(200).json({ scores: scoreResults })
+    return NextResponse.json({ scores: scoreResults })
   } catch (error) {
     console.error(error)
-    res
-      .status(500)
-      .json({ message: 'Internal Error', error: (error as Error).message })
+    NextResponse.json(
+      { message: 'Internal Error', error: (error as Error).message },
+      { status: 500 }
+    )
   }
 }
 
@@ -52,5 +54,3 @@ const removeDups = (arr: string[]): string[] => {
   }, [])
   return unique
 }
-
-export default handler
