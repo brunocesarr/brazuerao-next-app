@@ -31,8 +31,8 @@ async function readBrazueraoSheet(year: number) {
     for (let index = 0; index < betNumPlayers; index++) {
       const teamsPositionsTable = rows.slice(1, rows.length)
       const betTeamsInfoUser: IBetBrazueraoInfoUser = {
-        name: `${rows[0][index]}`,
-        teamsClassification: teamsPositionsTable.map((row) => `${row[index]}`),
+        username: `${rows[0][index]}`,
+        classification: teamsPositionsTable.map((row) => `${row[index]}`),
       }
       betBrazueraoInfoUsers.push(betTeamsInfoUser)
     }
@@ -43,8 +43,8 @@ async function readBrazueraoSheet(year: number) {
 
     betBrazueraoInfoUsers = await Promise.all(
       betBrazueraoInfoUsers.map(async (betBrazueraoInfoUser) => {
-        const { teamsClassification } = betBrazueraoInfoUser
-        betBrazueraoInfoUser.teamsClassification = await formatTeamsNames(
+        const { classification: teamsClassification } = betBrazueraoInfoUser
+        betBrazueraoInfoUser.classification = await formatTeamsNames(
           teamsClassification,
           teams
         )

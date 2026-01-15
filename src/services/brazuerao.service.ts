@@ -139,24 +139,24 @@ async function calculateUsersBetScores(
   const currentTeamChampion = leagueTable.at(0)?.nomePopular
 
   betsLeagueTable.map((betUserLeagueTable) => {
-    const currentBetTeamChampion = betUserLeagueTable.teamsClassification.at(0)
+    const currentBetTeamChampion = betUserLeagueTable.classification.at(0)
 
     const userScoreInBet: IBetUserClassification = {
       position: 0,
-      username: betUserLeagueTable.name,
+      username: betUserLeagueTable.username,
       score: calculateScore(
         leagueTable,
-        betUserLeagueTable.teamsClassification,
+        betUserLeagueTable.classification,
         useOriginalZonesInTable
       ),
       isCurrentChampionCorrect: currentTeamChampion === currentBetTeamChampion,
       teamsInCorrectsPositions: getTeamsInCorrectPositionsWithPositionInfo(
         leagueTable,
-        betUserLeagueTable.teamsClassification
+        betUserLeagueTable.classification
       ),
       teamsInCorrectZones: getTeamsInCorrectZonesWithPositionInfo(
         leagueTable,
-        betUserLeagueTable.teamsClassification,
+        betUserLeagueTable.classification,
         useOriginalZonesInTable
       ),
     }
@@ -168,32 +168,42 @@ async function calculateUsersBetScores(
 }
 
 async function calculateIndividualScore(
-  teamsClassification: string[],
+  bets: IBetBrazueraoInfoUser[],
   useOriginalZonesInTable: boolean = false
 ) {
   const leagueTable: ITeamPositionInfo[] = await getBrasileiraoTable(false)
 
+  let userScores: IBetUserClassification[] = []
+
   const currentTeamChampion = leagueTable.at(0)?.nomePopular
 
-  const currentBetTeamChampion = teamsClassification.at(0)
+  bets.map((betUserLeagueTable) => {
+    const currentBetTeamChampion = betUserLeagueTable.classification.at(0)
 
-  return {
-    score: calculateScore(
-      leagueTable,
-      teamsClassification,
-      useOriginalZonesInTable
-    ),
-    isCurrentChampionCorrect: currentTeamChampion === currentBetTeamChampion,
-    teamsInCorrectsPositions: getTeamsInCorrectPositionsWithPositionInfo(
-      leagueTable,
-      teamsClassification
-    ),
-    teamsInCorrectZones: getTeamsInCorrectZonesWithPositionInfo(
-      leagueTable,
-      teamsClassification,
-      useOriginalZonesInTable
-    ),
-  }
+    const userScoreInBet: IBetUserClassification = {
+      position: 0,
+      username: betUserLeagueTable.username,
+      score: calculateScore(
+        leagueTable,
+        betUserLeagueTable.classification,
+        useOriginalZonesInTable
+      ),
+      isCurrentChampionCorrect: currentTeamChampion === currentBetTeamChampion,
+      teamsInCorrectsPositions: getTeamsInCorrectPositionsWithPositionInfo(
+        leagueTable,
+        betUserLeagueTable.classification
+      ),
+      teamsInCorrectZones: getTeamsInCorrectZonesWithPositionInfo(
+        leagueTable,
+        betUserLeagueTable.classification,
+        useOriginalZonesInTable
+      ),
+    }
+
+    userScores.push(userScoreInBet)
+  })
+
+  return reorderUserByScore(userScores)
 }
 
 function reorderUserByScore(userScores: IBetUserClassification[]) {
@@ -468,10 +478,12 @@ async function getBrazueraoTableByUser(
     await readBrazueraoSheet(year)
 
   const brazueraoTable = betsLeagueTable.find((betLeagueTable) => {
-    return betLeagueTable.name.toUpperCase().includes(username.toUpperCase())
+    return betLeagueTable.username
+      .toUpperCase()
+      .includes(username.toUpperCase())
   })
 
-  return brazueraoTable?.teamsClassification ?? []
+  return brazueraoTable?.classification ?? []
 }
 
 export {
