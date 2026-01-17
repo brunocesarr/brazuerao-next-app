@@ -16,19 +16,57 @@ export async function POST(request: NextRequest) {
       bets.length <= 0 ||
       !isValidBody(bets)
     ) {
-      return NextResponse.json({ error: 'Invalid body' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Invalid body' },
+        {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*', // or specific origin
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          },
+        }
+      )
     }
 
     const scoreResults = await calculateIndividualScore(bets)
 
-    return NextResponse.json({ scores: scoreResults })
+    return NextResponse.json({
+      scores: scoreResults,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // or specific origin
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    })
   } catch (error) {
     console.error(error)
     NextResponse.json(
       { message: 'Internal Error', error: (error as Error).message },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*', // or specific origin
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
+      }
     )
   }
+}
+
+export async function OPTIONS(request: Request) {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  })
 }
 
 const isValidBody = (bets: IBetBrazueraoInfoUser[]): boolean => {
