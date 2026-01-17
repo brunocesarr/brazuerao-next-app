@@ -26,11 +26,11 @@ import Tabs from '@mui/material/Tabs'
 import { useSearchParams } from 'next/navigation'
 import { Roboto } from 'next/font/google'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
 const inter = Roboto({ weight: '400', subsets: ['latin'] })
 
-export default function Home() {
+function Home() {
   const searchParams = useSearchParams()
   const forceRefresh = searchParams.get('forceRefresh')
   const [usersScore, setUsersScore] = useState<IBetUserClassification[]>([])
@@ -286,5 +286,61 @@ export default function Home() {
         </Container>
       </main>
     </>
+  )
+}
+
+function HomeLoading() {
+  return (
+    <Container fixed>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
+        <Skeleton
+          variant="circular"
+          height={100}
+          width={100}
+          sx={{ backgroundColor: 'grey.900' }}
+        >
+          <Avatar />
+        </Skeleton>
+        <Skeleton
+          animation="wave"
+          height={30}
+          width="20%"
+          sx={{ backgroundColor: 'grey.900' }}
+        />
+        <Skeleton
+          variant="rectangular"
+          animation="wave"
+          height={60}
+          width="100%"
+          sx={{ backgroundColor: 'grey.900' }}
+        >
+          <Tabs />
+        </Skeleton>
+        <Skeleton
+          variant="rectangular"
+          animation="wave"
+          height={300}
+          width="100%"
+          sx={{ mt: 1, backgroundColor: 'grey.900' }}
+        >
+          <TableComponent betClassificationUsers={[]} />
+        </Skeleton>
+      </Box>
+    </Container>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<HomeLoading />}>
+      <Home />
+    </Suspense>
   )
 }

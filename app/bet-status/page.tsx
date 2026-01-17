@@ -33,7 +33,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -51,8 +51,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }))
 
-export default function BetStatusDetail() {
-  const getUsername = () => {
+function BetStatusDetail() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [brazueraoTable, setBrazueraoTable] = useState<string[]>([])
+  const [brazilianTable, setBrazilianTable] = useState<ITeamPositionInfo[]>([])
+  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [zonesInTable, setZonesInTable] = useState('planilha')
+
+  const username = () => {
     let username = searchParams.get('user')
     if (username) {
       return (
@@ -64,17 +72,8 @@ export default function BetStatusDetail() {
     }
   }
 
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const username = getUsername()
-  const [brazueraoTable, setBrazueraoTable] = useState<string[]>([])
-  const [brazilianTable, setBrazilianTable] = useState<ITeamPositionInfo[]>([])
-  const [errorMessage, setErrorMessage] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [zonesInTable, setZonesInTable] = useState('planilha')
-
   useEffect(() => {
-    if (!username) {
+    if (!username()) {
       setErrorMessage('User not Found')
       return
     }
@@ -85,7 +84,7 @@ export default function BetStatusDetail() {
         setErrorMessage('')
 
         const brazilianTableResult = await getBrazilianTable()
-        const brazueraoTableResult = await getBrazueraoTableByUser(username)
+        const brazueraoTableResult = await getBrazueraoTableByUser(username())
 
         setBrazilianTable(brazilianTableResult)
         setBrazueraoTable(brazueraoTableResult)
@@ -98,7 +97,7 @@ export default function BetStatusDetail() {
     getTablesInfo()
       .catch((error) => setErrorMessage((error as Error).message))
       .finally(() => setIsLoading(false))
-  }, [username])
+  }, [username()])
 
   const backgroundColorRow = (positionTeam: number) => {
     const backgroundColorIfZonaCentral = zonesInTable
@@ -209,7 +208,7 @@ export default function BetStatusDetail() {
         >
           <Typography>
             {' '}
-            Nenhum dado encontrado de apostas do {username}
+            Nenhum dado encontrado de apostas do {username()}
           </Typography>
         </Box>
       </Container>
@@ -258,13 +257,13 @@ export default function BetStatusDetail() {
                 }}
               >
                 <Avatar
-                  alt={username}
-                  src={getUrlPhotoUrl(username)}
+                  alt={username()}
+                  src={getUrlPhotoUrl(username())}
                   sx={{ width: 60, height: 60, backgroundColor: 'red', m: 1 }}
                   variant="circular"
                 />
                 <Typography variant="body1">
-                  <b>{username}</b>
+                  <b>{username()}</b>
                 </Typography>
               </Box>
               <Box
@@ -332,7 +331,7 @@ export default function BetStatusDetail() {
                     borderBottom: '1px solid white',
                   }}
                 >
-                  <Typography>Classificação - Aposta {username}</Typography>
+                  <Typography>Classificação - Aposta {username()}</Typography>
                 </Box>
                 <Table aria-label="collapsible table">
                   <TableHead>
@@ -431,5 +430,49 @@ export default function BetStatusDetail() {
         )}
       </Container>
     </>
+  )
+}
+
+function BetStatusDetailLoading() {
+  return (
+    <Container fixed>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
+        <Skeleton
+          variant="circular"
+          height={100}
+          width={100}
+          sx={{ backgroundColor: 'grey.900' }}
+        />
+        <Skeleton
+          variant="rectangular"
+          animation="wave"
+          height={60}
+          width="85vw"
+          sx={{ backgroundColor: 'grey.900' }}
+        />
+        <Skeleton
+          variant="rectangular"
+          animation="wave"
+          height={300}
+          width="85vw"
+          sx={{ mt: 1, backgroundColor: 'grey.900' }}
+        />
+      </Box>
+    </Container>
+  )
+}
+
+export default function BetStatusDetailPage() {
+  return (
+    <Suspense fallback={<BetStatusDetailLoading />}>
+      <BetStatusDetail />
+    </Suspense>
   )
 }
